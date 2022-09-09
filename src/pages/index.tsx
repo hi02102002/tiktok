@@ -10,6 +10,6 @@ const Home: NextPageWithLayout = () => {
     );
 };
 
-export const getServerSideProps = withRoute({ isProtected: true })();
+export const getServerSideProps = withRoute({ isProtected: false })();
 
 export default Home;

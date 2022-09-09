@@ -11,6 +11,8 @@ import { toast } from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { FiMenu } from 'react-icons/fi';
 
+import Search from './Search';
+
 const Header = () => {
     const user = useAppSelector(selectUser);
     const router = useRouter();
@@ -28,6 +30,7 @@ const Header = () => {
             <div className="app-container">
                 <nav className="flex items-center gap-4 justify-between">
                     <Logo />
+                    <Search />
                     <div className="hidden sm:flex items-center gap-4">
                         <Button
                             typeButton="tertiary"
