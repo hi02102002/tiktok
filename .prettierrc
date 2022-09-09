@@ -1,0 +1,24 @@
+{
+   "printWidth": 80,
+   "tabWidth": 4,
+   "trailingComma": "all",
+   "singleQuote": true,
+   "semi": true,
+   "importOrder": [
+      "^react$",
+      "^(next/(.*)$)|^(next$)",
+      "<THIRD_PARTY_MODULES>",
+      "^(@types/(.*)$)|^(@types$)",
+      "^(@store/(.*)$)|^(@store$)",
+      "^(@features/(.*)$)|^(@features$)",
+      "^(@hooks/(.*)$)|^(@hooks$)",
+      "^(@components/(.*)$)|^(@components$)",
+      "^(@screens/(.*)$)|^(@screens$)",
+      "^(@utils/(.*)$)|^(@utils$)",
+      "^(@services/(.*)$)|^(@services$)",
+      "^(@styles/(.*)$)|^(@styles$)",
+      "^[./]"
+   ],
+   "importOrderSeparation": true,
+   "importOrderSortSpecifiers": true
+}

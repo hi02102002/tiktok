@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#nprogress {
+    pointer-events: none;
+}
+
+#nprogress .bar {
+    @apply bg-rose-500 fixed z-[1031] top-0 left-0 w-full h-[2px];
+}
+
+#nprogress .peg {
+    @apply shadow-nProgress block absolute right-0 w-[100px] h-full opacity-100;
+
+    -webkit-transform: rotate(3deg) translate(0px, -4px);
+    -ms-transform: rotate(3deg) translate(0px, -4px);
+    transform: rotate(3deg) translate(0px, -4px);
+}
