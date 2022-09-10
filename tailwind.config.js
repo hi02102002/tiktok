@@ -8,13 +8,18 @@ module.exports = {
         extend: {
             spacing: {
                 header: '3.75rem',
+                sidebar: '22.25rem',
             },
             colors: {
                 primary: colors.rose[500],
+                subtext: colors.neutral[400],
             },
             boxShadow: {
                 header: '0px 1px 1px rgb(0 0 0 / 12%)',
                 nProgress: `0 0 10px ${colors.rose[500]}, 0 0 5px ${colors.rose[500]}`,
+            },
+            maxWidth: {
+                sidebar: '22.25rem',
             },
         },
     },

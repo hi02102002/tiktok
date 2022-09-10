@@ -5,4 +5,5 @@ export { default as Header } from './Header';
 export { default as Logo } from './Logo';
 export { default as Menu } from './Menu';
 export { default as SectionUser } from './SectionUser';
+export { default as Sidebar } from './Sidebar';
 export { default as Spiner } from './Spiner';

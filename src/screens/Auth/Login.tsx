@@ -1,10 +1,10 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { Button } from '@/components';
-import { DefaultLayout } from '@/components/Layout';
+import { LayOutOnlyHeader } from '@/components/Layout';
 import { ROUTES } from '@/constants';
 import { useFocusFirstInput, useTogglePassword } from '@/hooks';
 import { NextPageWithLayout } from '@/types';
@@ -153,8 +153,8 @@ const Login: NextPageWithLayout = () => {
     );
 };
 
-Login.getLayout = function getLayout(page: ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>;
+Login.getLayout = function (page) {
+    return <LayOutOnlyHeader>{page}</LayOutOnlyHeader>;
 };
 
 export default Login;

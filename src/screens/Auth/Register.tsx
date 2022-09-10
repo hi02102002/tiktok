@@ -1,10 +1,10 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { Button } from '@/components';
-import { DefaultLayout } from '@/components/Layout';
+import { LayOutOnlyHeader } from '@/components/Layout';
 import { ROUTES } from '@/constants';
 import { useFocusFirstInput, useTogglePassword } from '@/hooks';
 import { IRes, IUser, NextPageWithLayout } from '@/types';
@@ -254,8 +254,8 @@ const Register: NextPageWithLayout = () => {
     );
 };
 
-Register.getLayout = function getLayout(page: ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>;
+Register.getLayout = function (page) {
+    return <LayOutOnlyHeader>{page}</LayOutOnlyHeader>;
 };
 
 export default Register;

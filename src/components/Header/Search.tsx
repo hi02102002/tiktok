@@ -34,6 +34,8 @@ const Search = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const $inputRef = useRef<HTMLInputElement | null>(null);
+    const $searchWrapperRef = useRef<HTMLDivElement | null>(null);
+    const [widthSearchDropdown, setWidthSearchDropdown] = useState<number>(0);
 
     const handleNavigateToSearch = useCallback(
         (e: MouseEvent<HTMLButtonElement>) => {
@@ -54,10 +56,24 @@ const Search = () => {
     );
 
     const handleCancel = () => {
-        setTextSearch('');
         setShow(false);
         $inputRef.current?.focus();
+        setTextSearch('');
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWidthSearchDropdown(
+                $searchWrapperRef.current?.offsetWidth as number,
+            );
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -67,7 +83,7 @@ const Search = () => {
                     return;
                 }
                 setLoading(true);
-                const result = await usersServices.getAllUsers(
+                const result = await usersServices.searchUsers(
                     debounceValue,
                     LIMIT,
                     PAGE,
@@ -83,62 +99,84 @@ const Search = () => {
     }, [debounceValue]);
 
     return (
-        <Tippy
-            render={(attrs) => (
-                <div className="w-[360px]" tabIndex={-1} {...attrs}>
-                    <ul className="py-2 bg-white shadow rounded">
-                        <h3 className="px-4 py-2 font-semibold">Accounts</h3>
-                        {searchResult.map((user) => {
-                            return (
-                                <li key={user._id}>
-                                    <SectionUser user={user} sizeAvatar={32} />
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            )}
-            interactive
-            visible={searchResult.length > 0 && show}
-            onClickOutside={() => {
-                setShow(false);
-            }}
-        >
-            <div className="max-w-[360px] flex-1">
-                <form className="px-4 py-2 w-full rounded-full bg-neutral-100 flex items-center focus-within:border-neutral-300 border border-transparent transition-all overflow-hidden">
-                    <input
-                        type="text"
-                        placeholder="Search accounts..."
-                        className="bg-transparent outline-0 placeholder:leading-[1] w-full"
-                        value={textSearch}
-                        onChange={handleChange}
-                        onFocus={() => {
-                            setShow(true);
+        <div>
+            <Tippy
+                render={(attrs) => (
+                    <div
+                        className="w-full"
+                        tabIndex={-1}
+                        {...attrs}
+                        style={{
+                            width:
+                                widthSearchDropdown ||
+                                $searchWrapperRef.current?.offsetWidth,
                         }}
-                        ref={$inputRef}
-                    />
-                    <div className="mx-4 flex items-center justify-center">
-                        {loading ? (
-                            <Spiner className="!text-neutral-500" size="16px" />
-                        ) : (
-                            textSearch && (
-                                <button type="button" onClick={handleCancel}>
-                                    <IoIosCloseCircle className="icon-16 text-neutral-500 " />
-                                </button>
-                            )
-                        )}
-                    </div>
-                    <span className="h-7 self-stretch w-[1px] mr-4 flex-shrink-0 bg-neutral-200"></span>
-                    <button
-                        type="button"
-                        className="px-4 py-2 -mx-4 -my-2 self-stretch hover:bg-neutral-200"
-                        onClick={handleNavigateToSearch}
                     >
-                        <HiOutlineSearch className="icon-24 text-neutral-500 " />
-                    </button>
-                </form>
-            </div>
-        </Tippy>
+                        <ul className="py-2 bg-white shadow rounded">
+                            <h3 className="px-4 py-2 font-semibold">
+                                Accounts
+                            </h3>
+                            {searchResult.map((user) => {
+                                return (
+                                    <li key={user._id}>
+                                        <SectionUser
+                                            user={user}
+                                            sizeAvatar={32}
+                                        />
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+                )}
+                interactive
+                visible={searchResult.length > 0 && show}
+                onClickOutside={() => {
+                    setShow(false);
+                }}
+            >
+                <div className="max-w-[360px] flex-1" ref={$searchWrapperRef}>
+                    <form className="px-4 py-2 w-full rounded-full bg-neutral-100 flex items-center focus-within:border-neutral-300 border border-transparent transition-all overflow-hidden">
+                        <input
+                            type="text"
+                            placeholder="Search accounts..."
+                            className="bg-transparent outline-0 placeholder:leading-[1] w-full"
+                            value={textSearch}
+                            onChange={handleChange}
+                            onFocus={() => {
+                                setShow(true);
+                            }}
+                            ref={$inputRef}
+                        />
+                        <div className="mx-4 w-4 flex items-center justify-center">
+                            {loading ? (
+                                <Spiner
+                                    className="!text-neutral-500"
+                                    size="16px"
+                                />
+                            ) : (
+                                textSearch && (
+                                    <button
+                                        type="button"
+                                        onClick={handleCancel}
+                                    >
+                                        <IoIosCloseCircle className="icon-16 text-neutral-500 " />
+                                    </button>
+                                )
+                            )}
+                        </div>
+                        <span className="h-7 self-stretch w-[1px] mr-4 flex-shrink-0 bg-neutral-200"></span>
+                        <button
+                            type="button"
+                            className="px-4 py-2 -mx-4 -my-2 self-stretch hover:bg-neutral-200"
+                            onClick={handleNavigateToSearch}
+                        >
+                            <HiOutlineSearch className="icon-24 text-neutral-500 " />
+                        </button>
+                    </form>
+                </div>
+            </Tippy>
+        </div>
     );
 };
 

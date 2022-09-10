@@ -26,7 +26,7 @@ const Header = () => {
     }, [router, user]);
 
     return (
-        <header className="flex items-center h-header bg-white shadow-header">
+        <header className="flex items-center h-header bg-white shadow-header ">
             <div className="app-container">
                 <nav className="flex items-center gap-4 justify-between">
                     <Logo />

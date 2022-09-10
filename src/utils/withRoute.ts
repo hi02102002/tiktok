@@ -5,6 +5,7 @@ import { setUser } from '@/features/user';
 import { wrapper } from '@/store';
 import { IUser } from '@/types';
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
+import _ from 'lodash';
 import { getSession } from 'next-auth/react';
 
 interface IOptions {
@@ -53,18 +54,20 @@ export const withRoute =
                     const sessionUser = session?.user as IUser;
 
                     if (session?.user) {
-                        const user: IUser = {
-                            _id: sessionUser._id,
-                            firstName: sessionUser.firstName,
-                            lastName: sessionUser.lastName,
-                            email: sessionUser.email,
-                            createdAt: sessionUser.createdAt,
-                            updatedAt: sessionUser.updatedAt,
-                            username: sessionUser.username,
-                            numLike: sessionUser.numLike,
-                            numFollow: sessionUser.numFollow,
-                            avatar: sessionUser.avatar,
-                        };
+                        const user = _.pick<IUser>(sessionUser, [
+                            '_id',
+                            'firstName',
+                            'lastName',
+                            'email',
+                            'createdAt',
+                            'updatedAt',
+                            'avatar',
+                            'username',
+                            'numLike',
+                            'numFollow',
+                            'followers',
+                            'following',
+                        ]) as IUser;
 
                         dispatch(setUser(user));
                     } else {

@@ -1,14 +1,5 @@
-import { Header } from '@/components';
-import { NextPageWithLayout } from '@/types';
+import Home from '@/screens/Home';
 import { withRoute } from '@/utils';
-
-const Home: NextPageWithLayout = () => {
-    return (
-        <div>
-            <Header />
-        </div>
-    );
-};
 
 export const getServerSideProps = withRoute({ isProtected: false })();
 

@@ -27,6 +27,8 @@ export interface IUser {
     username: string;
     numLike: number;
     numFollow: number;
+    followers: Array<string>;
+    following: Array<string>;
 }
 
 export interface IToken {

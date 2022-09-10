@@ -1,4 +1,4 @@
-import { Header } from '@/components';
+import { Header, Sidebar } from '@/components';
 
 interface Props {
     children: React.ReactNode;
@@ -7,10 +7,15 @@ interface Props {
 const DefaultLayout = ({ children }: Props) => {
     return (
         <>
-            <div className="fixed top-0 left-0 right-0 z-40">
+            <div className="fixed left-0 right-0 top-0 z-[100]">
                 <Header />
             </div>
-            {children}
+            <div className="app-container">
+                <Sidebar />
+                <div className="mt-header min-h-[calc(100vh_-_60px)] ml-sidebar">
+                    {children}
+                </div>
+            </div>
         </>
     );
 };
