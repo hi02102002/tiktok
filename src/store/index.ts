@@ -1,3 +1,4 @@
+import { postReducer } from '@/features/post';
 import { userReducer } from '@/features/user';
 import { Action, configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
@@ -7,6 +8,7 @@ import { ThunkAction } from 'redux-thunk';
 const store = configureStore({
     reducer: {
         user: userReducer,
+        post: postReducer,
     },
 });
 

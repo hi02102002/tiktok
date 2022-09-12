@@ -9,7 +9,7 @@ import {
 
 import { useRouter } from 'next/router';
 
-import { useDebounce } from '@/hooks';
+import { useDebounce, useGetWidthParent } from '@/hooks';
 import usersServices from '@/services/users.services';
 import { IUser } from '@/types';
 import Tippy from '@tippyjs/react/headless';
@@ -32,10 +32,9 @@ const Search = () => {
         setTextSearch(e.target.value);
     }, []);
     const [loading, setLoading] = useState<boolean>(false);
-
     const $inputRef = useRef<HTMLInputElement | null>(null);
-    const $searchWrapperRef = useRef<HTMLDivElement | null>(null);
-    const [widthSearchDropdown, setWidthSearchDropdown] = useState<number>(0);
+    const { width: widthSearchDropdown, parentRef: $searchWrapperRef } =
+        useGetWidthParent();
 
     const handleNavigateToSearch = useCallback(
         (e: MouseEvent<HTMLButtonElement>) => {
@@ -60,20 +59,6 @@ const Search = () => {
         $inputRef.current?.focus();
         setTextSearch('');
     };
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWidthSearchDropdown(
-                $searchWrapperRef.current?.offsetWidth as number,
-            );
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
 
     useEffect(() => {
         (async () => {

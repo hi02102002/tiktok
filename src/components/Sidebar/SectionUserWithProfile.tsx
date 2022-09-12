@@ -43,7 +43,7 @@ const BriefProfile = ({ user }: Props) => {
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
                         <span className="text-lg font-bold">
-                            {user.numFollow}
+                            {user.followers.length}
                         </span>
                         <span className="text-lg font-semibold text-subtext">
                             Followers

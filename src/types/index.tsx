@@ -40,3 +40,21 @@ export interface IRes<T> {
     message: string;
     data: T;
 }
+
+export interface IFile {
+    id: string;
+    url: string;
+}
+
+export interface IPost {
+    caption: string;
+    user: IUser;
+    type: 'PUBLIC' | 'PRIVATE';
+    video: IFile;
+    allowComment: boolean;
+    numLike: number;
+    numComment: number;
+    isLiked: boolean;
+}
+
+export type IPostInput = Pick<IPost, 'allowComment' | 'caption' | 'video'>;
