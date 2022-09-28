@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { selectUser } from '@/features/user';
-import { useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import usersServices from '@/services/users.services';
 import { IUser } from '@/types';
 import classNames from 'classnames/bind';
@@ -14,12 +14,12 @@ const LIMIT = 10;
 const cx = classNames.bind(styles);
 
 const SuggestAccounts = () => {
-    const [suggestAccounts, setSuggestAccounts] = useState<Array<IUser>>([]);
     const user = useAppSelector(selectUser);
     const [isSeeMore, setIsSeeMore] = useState<boolean>(true);
-    const [hasMore, setHasMore] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
-
+    const dispatch = useAppDispatch();
+    const [suggestAccounts, setSuggestAccounts] = useState<Array<IUser>>([]);
+    const [hasMore, setHasMore] = useState<boolean>(true);
     const handleToggleSee = () => {
         setIsSeeMore(!isSeeMore);
     };
@@ -28,22 +28,22 @@ const SuggestAccounts = () => {
         (async () => {
             try {
                 setLoading(true);
-                const _users = await usersServices.getSuggestAccounts(
-                    user?._id as string,
-                );
-                if (_users.length < LIMIT) {
-                    setHasMore(false);
-                } else {
+                const resSuggestAccounts =
+                    await usersServices.getSuggestAccounts(user?._id as string);
+
+                if (resSuggestAccounts.length >= LIMIT) {
                     setHasMore(true);
+                } else {
+                    setHasMore(false);
                 }
-                setSuggestAccounts(_users);
+                setSuggestAccounts(resSuggestAccounts);
             } catch (error) {
                 console.log(error);
             } finally {
                 setLoading(false);
             }
         })();
-    }, [user?._id]);
+    }, [user?._id, dispatch]);
 
     return (
         <div className={cx('list-accounts')}>
@@ -53,14 +53,20 @@ const SuggestAccounts = () => {
                     ? suggestAccounts.slice(0, LIMIT).map((account) => {
                           return (
                               <li key={account._id}>
-                                  <SectionUserWithProfile user={account} />
+                                  <SectionUserWithProfile
+                                      user={account}
+                                      setAccounts={setSuggestAccounts}
+                                  />
                               </li>
                           );
                       })
                     : suggestAccounts.map((account) => {
                           return (
                               <li key={account._id}>
-                                  <SectionUserWithProfile user={account} />
+                                  <SectionUserWithProfile
+                                      user={account}
+                                      setAccounts={setSuggestAccounts}
+                                  />
                               </li>
                           );
                       })}

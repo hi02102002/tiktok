@@ -12,8 +12,10 @@ const DefaultLayout = ({ children }: Props) => {
             </div>
             <div className="app-container">
                 <Sidebar />
-                <div className="mt-header min-h-[calc(100vh_-_60px)] ml-sidebar">
-                    {children}
+                <div className="mt-header min-h-[calc(100vh_-_60px)] lg:ml-sidebar ml-0 md:ml-sidebarSmall ">
+                    <div className="max-w-2xl mx-auto py-6 md:pl-4">
+                        {children}
+                    </div>
                 </div>
             </div>
         </>

@@ -18,6 +18,12 @@ const userSlice = createSlice({
         setUser: (state, action: PayloadAction<IUser | null>) => {
             state.user = action.payload;
         },
+        toggleFollow: (state, action: PayloadAction<IUser>) => {
+            state.user = {
+                ...state.user,
+                ...action.payload,
+            };
+        },
     },
     extraReducers: {
         [HYDRATE]: (state, action) => {
@@ -31,7 +37,7 @@ const userSlice = createSlice({
     },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, toggleFollow } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.user;
 
 export const userReducer = userSlice.reducer;

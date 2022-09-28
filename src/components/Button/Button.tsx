@@ -24,7 +24,11 @@ const Button = ({
             {...rest}
         >
             {loading && (
-                <Spiner className={disabled ? 'text-neutral-500' : ''} />
+                <Spiner
+                    className={
+                        disabled || typeButton === 'tertiary' ? 'text-neutral-500' : ''
+                    }
+                />
             )}
             {!loading && iconLeft}
             {children}

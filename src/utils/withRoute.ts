@@ -4,9 +4,8 @@ import axios from '@/axios';
 import { ROUTES } from '@/constants';
 import { setUser } from '@/features/user';
 import { wrapper } from '@/store';
-import { IUser } from '@/types';
+import { IRes, IUser } from '@/types';
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
-import _ from 'lodash';
 import { getSession } from 'next-auth/react';
 
 interface IOptions {
@@ -55,21 +54,14 @@ export const withRoute =
                     axios.defaults.headers.common.authorization = `Bearer ${session?.accessToken}`;
                     const sessionUser = session?.user as IUser;
 
-                    if (session?.user) {
-                        const user = _.pick<IUser>(sessionUser, [
-                            '_id',
-                            'firstName',
-                            'lastName',
-                            'email',
-                            'createdAt',
-                            'updatedAt',
-                            'avatar',
-                            'username',
-                            'numLike',
-                            'numFollow',
-                            'followers',
-                            'following',
-                        ]) as IUser;
+                    if (sessionUser) {
+                        const user = await axios
+                            .get<
+                                IRes<{
+                                    user: IUser;
+                                }>
+                            >(`/users/${sessionUser._id}`)
+                            .then((value) => value.data.data.user);
 
                         dispatch(setUser(user));
                     } else {

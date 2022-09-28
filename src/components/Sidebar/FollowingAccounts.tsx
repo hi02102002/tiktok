@@ -4,7 +4,7 @@ import usersServices from '@/services/users.services';
 import { IUser } from '@/types';
 import classNames from 'classnames/bind';
 
-import SectionUserWithProfile from './SectionUserWithProfile';
+import SectionUser from '../SectionUser';
 import styles from './Sidebar.module.scss';
 
 const cx = classNames.bind(styles);
@@ -50,7 +50,11 @@ const FollowingAccounts = () => {
                         {followingAccounts.map((account) => {
                             return (
                                 <li key={account._id}>
-                                    <SectionUserWithProfile user={account} />
+                                    <SectionUser
+                                        user={account}
+                                        className={cx('account')}
+                                        classNameInfo={cx('info')}
+                                    />
                                 </li>
                             );
                         })}

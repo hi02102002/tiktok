@@ -1,5 +1,5 @@
 .sidebar {
-    @apply max-w-sidebar fixed mt-header h-[calc(100vh_-_60px)] w-full overflow-y-auto top-0;
+    @apply max-w-sidebarSmall lg:max-w-sidebar fixed mt-header h-[calc(100vh_-_60px)] w-full overflow-y-auto top-0 md:block hidden left-0 lg:left-[unset];
 }
 
 .wrapper {
@@ -16,7 +16,11 @@
         }
 
         .text {
-            @apply text-lg font-semibold;
+            @apply text-lg font-semibold lg:block hidden;
+        }
+
+        svg {
+            @apply flex-shrink-0;
         }
     }
 }
@@ -25,11 +29,15 @@
     @apply py-2;
 
     .title {
-        @apply font-semibold text-sm text-subtext mb-2 block;
+        @apply font-semibold text-sm text-subtext mb-2  lg:block hidden;
     }
 
     .account {
         @apply gap-2;
+
+        .info {
+            @apply lg:block hidden;
+        }
     }
 
     .account h3 {

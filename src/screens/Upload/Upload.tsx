@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components';
 import { LayOutOnlyHeader } from '@/components/Layout';
@@ -30,12 +30,20 @@ const Upload: NextPageWithLayout = () => {
     const [type, setType] = useState<{
         label: string;
         value: string;
-    } | null>(TYPES[0]);
+    }>(TYPES[0]);
     const [video, setVideo] = useState<File | null>(null);
     const [loadingUpload, setLoadingUpload] = useState<boolean>(false);
     const onDrop = useCallback((acceptedFiles: Array<File>) => {
         setVideo(acceptedFiles[0]);
     }, []);
+    const [videoSize, setVideoSize] = useState<{
+        width: number;
+        height: number;
+    }>({
+        width: 0,
+        height: 0,
+    });
+    const $videoRef = useRef<HTMLVideoElement | null>(null);
 
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -49,18 +57,33 @@ const Upload: NextPageWithLayout = () => {
         setAllowComment(true);
         setType(TYPES[0]);
         setVideo(null);
+        setVideoSize({
+            height: 0,
+            width: 0,
+        });
     }, []);
 
     const handelUpload = useCallback(async () => {
+        let toastId;
         try {
             setLoadingUpload(true);
+            toastId = toast.loading('Uploading...');
             const urls = await uploadServices.upload([video as File]);
+            const $video = document.createElement('video');
+            $video.src = urls[0].url;
+            $video.addEventListener('loadedmetadata', function () {
+                console.log('width:', this.videoWidth);
+                console.log('height:', this.videoHeight);
+            });
             const _postRes = await postServices.addPost({
                 allowComment,
                 caption,
                 video: {
                     ...urls[0],
                 },
+                width: videoSize.width,
+                height: videoSize.height,
+                type: type.value,
             });
             dispatch(createPost(_postRes));
             toast.success('Create post successfully.');
@@ -68,10 +91,29 @@ const Upload: NextPageWithLayout = () => {
         } catch (error: any) {
             console.log(error);
             toast.error('Something went wrong while create post.');
+            toast.dismiss(toastId);
         } finally {
             setLoadingUpload(false);
+            toast.dismiss(toastId);
         }
-    }, [allowComment, caption, dispatch, handleDiscard, video]);
+    }, [
+        allowComment,
+        caption,
+        dispatch,
+        handleDiscard,
+        video,
+        videoSize,
+        type.value,
+    ]);
+
+    useEffect(() => {
+        $videoRef.current?.addEventListener('loadedmetadata', function () {
+            setVideoSize({
+                width: this.videoWidth,
+                height: this.videoHeight,
+            });
+        });
+    }, [video]);
 
     return (
         <div className="flex-1 bg-neutral-100 flex ">
@@ -88,12 +130,13 @@ const Upload: NextPageWithLayout = () => {
                         </div>
                         <div className="mt-6 flex gap-6 md:flex-row flex-col">
                             {video ? (
-                                <div>
+                                <div className="flex items-center justify-center">
                                     <video
                                         width="289"
                                         className="rounded mx-auto"
                                         autoPlay
                                         controls
+                                        ref={$videoRef}
                                     >
                                         <source
                                             src={URL.createObjectURL(video)}

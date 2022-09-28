@@ -28,9 +28,11 @@
         "react-icons": "^4.4.0",
         "react-infinite-scroll-component": "^6.1.0",
         "react-redux": "^7.2.8",
+        "react-waypoint": "^10.3.0",
         "yup": "^0.32.11"
     },
     "devDependencies": {
+        "@tailwindcss/line-clamp": "^0.4.2",
         "@trivago/prettier-plugin-sort-imports": "^3.3.0",
         "@types/node": "18.7.16",
         "@types/nprogress": "^0.2.0",

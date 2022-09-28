@@ -49,12 +49,48 @@ export interface IFile {
 export interface IPost {
     caption: string;
     user: IUser;
-    type: 'PUBLIC' | 'PRIVATE';
+    type: string;
     video: IFile;
     allowComment: boolean;
     numLike: number;
-    numComment: number;
-    isLiked: boolean;
+    totalComment: number;
+    _id: string;
+    usersLiked: Array<string>;
+    createdAt: string;
+    updatedAt: string;
+    width: number;
+    height: number;
 }
 
-export type IPostInput = Pick<IPost, 'allowComment' | 'caption' | 'video'>;
+export type IPostInput = Pick<
+    IPost,
+    'allowComment' | 'caption' | 'video' | 'width' | 'height' | 'type'
+>;
+
+export enum TypeFollow {
+    FOLLOW,
+    UNFOLLOW,
+}
+
+export enum TypeLike {
+    UNLIKE,
+    LIKE,
+}
+
+export type onFollow = (
+    type: TypeFollow,
+    userId: string,
+    receiverId: string,
+) => void;
+
+export interface IComment {
+    user: IUser;
+    _id: string;
+    content: string;
+    parentId: string | null;
+    createdAt: string;
+    updatedAt: string;
+    usersLiked: Array<string>;
+    postId: string;
+    numChildren: number;
+}

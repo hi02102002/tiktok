@@ -44,6 +44,25 @@ class UserServices {
             })
             .then((value) => value.data.data.followingAccounts);
     };
+
+    public followUser = async (receiverId: string) => {
+        return await axios
+            .patch<
+                IRes<{
+                    user: IUser;
+                }>
+            >(`/users/follow/${receiverId}`)
+            .then((value) => value.data.data.user);
+    };
+    public unfollowUser = async (receiverId: string) => {
+        return await axios
+            .patch<
+                IRes<{
+                    user: IUser;
+                }>
+            >(`/users/unfollow/${receiverId}`)
+            .then((value) => value.data.data.user);
+    };
 }
 
 export default new UserServices();

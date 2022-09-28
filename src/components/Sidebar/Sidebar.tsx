@@ -128,10 +128,10 @@ const Sidebar = () => {
                         })}
                     </ul>
                 </div>
-                <Line />
                 {!user && (
                     <>
-                        <div className="py-5 px-4 flex flex-col gap-5">
+                        <Line />
+                        <div className="py-5 px-4 flex-col gap-5 lg:flex hidden">
                             <p className="text-subtext">
                                 Log in to follow creators, like videos, and view
                                 comments.

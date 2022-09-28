@@ -16,11 +16,11 @@ const Avatar = ({
 }: Props) => {
     return (
         <Image
-            src={src}
+            src={src || '/noavatar.jpg'}
             alt={alt}
             width={size}
             height={size}
-            className={`rounded-full ${className}`}
+            className={`rounded-full ${className} flex-shrink-0`}
             objectFit={objectFit}
             {...rest}
         />

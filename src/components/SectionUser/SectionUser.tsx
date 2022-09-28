@@ -7,8 +7,16 @@ interface Props {
     user: IUser;
     sizeAvatar?: number;
     className?: string;
+    classNameInfo?: string;
+    classNameAvatar?: string;
 }
-const SectionUser = ({ user, sizeAvatar = 32, className = '' }: Props) => {
+const SectionUser = ({
+    user,
+    sizeAvatar = 32,
+    className = '',
+    classNameInfo = '',
+    classNameAvatar = '',
+}: Props) => {
     return (
         <Link href={`/user/${user.username}`}>
             <a>
@@ -19,12 +27,13 @@ const SectionUser = ({ user, sizeAvatar = 32, className = '' }: Props) => {
                         src={user.avatar}
                         alt={user.username}
                         size={sizeAvatar}
+                        className={`${classNameAvatar} flex-shrink-0`}
                     />
-                    <div className="flex flex-col">
-                        <h3 className="font-semibold name">
+                    <div className={`flex flex-col info ${classNameInfo}`}>
+                        <h3 className="font-semibold name !leading-[1]">
                             {user.firstName} {user.lastName}
                         </h3>
-                        <span className="text-xs text-neutral-300">
+                        <span className="text-xs text-neutral-500">
                             {user.username}
                         </span>
                     </div>

@@ -9,6 +9,7 @@ module.exports = {
             spacing: {
                 header: '3.75rem',
                 sidebar: '22.25rem',
+                sidebarSmall: '4rem',
             },
             colors: {
                 primary: colors.rose[500],
@@ -20,10 +21,12 @@ module.exports = {
             },
             maxWidth: {
                 sidebar: '22.25rem',
+                sidebarSmall: '5rem',
             },
         },
     },
     plugins: [
+        require('@tailwindcss/line-clamp'),
         plugin(function ({ addUtilities, addComponents, theme }) {
             addComponents({
                 '.app-container': {
