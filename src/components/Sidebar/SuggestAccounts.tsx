@@ -4,9 +4,9 @@ import { selectUser } from '@/features/user';
 import { useAppSelector } from '@/hooks';
 import usersServices from '@/services/users.services';
 import { IUser } from '@/types';
+import classNames from 'classnames/bind';
 
 import SectionUserWithProfile from './SectionUserWithProfile';
-import classNames from 'classnames/bind';
 import styles from './Sidebar.module.scss';
 
 const LIMIT = 10;
@@ -43,7 +43,7 @@ const SuggestAccounts = () => {
                 setLoading(false);
             }
         })();
-    }, [user]);
+    }, [user?._id]);
 
     return (
         <div className={cx('list-accounts')}>

@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 
+import axios from '@/axios';
 import { ROUTES } from '@/constants';
 import { setUser } from '@/features/user';
 import { wrapper } from '@/store';
@@ -23,7 +24,7 @@ export const withRoute =
         wrapper.getServerSideProps(
             ({ dispatch }) =>
                 async (ctx: GetServerSidePropsContext) => {
-                    const session = await getSession(ctx);
+                    const session = await getSession({ req: ctx.req });
 
                     // neu user chua login va no la route protect
                     if (!session && options.isProtected) {
@@ -51,6 +52,7 @@ export const withRoute =
                         };
                     }
 
+                    axios.defaults.headers.common.authorization = `Bearer ${session?.accessToken}`;
                     const sessionUser = session?.user as IUser;
 
                     if (session?.user) {
