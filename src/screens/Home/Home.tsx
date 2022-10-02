@@ -17,7 +17,7 @@ const Home: NextPageWithLayout = () => {
 
     return (
         <div>
-            <ScrollInfinityPosts onGetMore={handleGetMore} />
+            <ScrollInfinityPosts onGetMore={handleGetMore} type="HOME" />
         </div>
     );
 };

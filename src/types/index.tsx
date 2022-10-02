@@ -29,6 +29,7 @@ export interface IUser {
     numFollow: number;
     followers: Array<string>;
     following: Array<string>;
+    bio: string;
 }
 
 export interface IToken {
@@ -60,11 +61,12 @@ export interface IPost {
     updatedAt: string;
     width: number;
     height: number;
+    cover: IFile;
 }
 
 export type IPostInput = Pick<
     IPost,
-    'allowComment' | 'caption' | 'video' | 'width' | 'height' | 'type'
+    'allowComment' | 'caption' | 'video' | 'width' | 'height' | 'type' | 'cover'
 >;
 
 export enum TypeFollow {

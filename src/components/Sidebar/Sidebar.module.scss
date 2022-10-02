@@ -9,7 +9,7 @@
 .main {
     @apply mb-2;
     .item {
-        @apply flex items-center gap-2 py-2 px-4 rounded hover:bg-neutral-100;
+        @apply flex items-center gap-2 py-2 px-4 rounded hover:bg-neutral-100 justify-center lg:justify-start;
 
         &.active {
             @apply text-rose-500;
@@ -33,7 +33,7 @@
     }
 
     .account {
-        @apply gap-2;
+        @apply gap-2 flex items-center justify-center lg:justify-start;
 
         .info {
             @apply lg:block hidden;

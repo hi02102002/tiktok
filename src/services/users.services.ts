@@ -17,6 +17,13 @@ class UserServices {
             })
             .then((value) => value.data.data.users);
     };
+
+    public async getUser(userId: string) {
+        return await axios
+            .get<IRes<{ user: IUser }>>(`/users/${userId}`)
+            .then((value) => value.data.data.user);
+    }
+
     public getSuggestAccounts = async (userId: string | undefined) => {
         return await axios
             .get<
@@ -61,6 +68,20 @@ class UserServices {
                     user: IUser;
                 }>
             >(`/users/unfollow/${receiverId}`)
+            .then((value) => value.data.data.user);
+    };
+
+    public updateUser = async (
+        userId: string,
+        data: Pick<
+            IUser,
+            'avatar' | 'bio' | 'firstName' | 'lastName' | 'username'
+        >,
+    ) => {
+        return await axios
+            .patch<IRes<{ user: IUser }>>(`/users/${userId}`, {
+                ...data,
+            })
             .then((value) => value.data.data.user);
     };
 }

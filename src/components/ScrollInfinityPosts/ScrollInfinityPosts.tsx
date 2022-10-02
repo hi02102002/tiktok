@@ -5,9 +5,10 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface Props {
     onGetMore: () => void;
+    type: 'FOLLOWING' | 'HOME';
 }
 
-const ScrollInfinityPosts = ({ onGetMore }: Props) => {
+const ScrollInfinityPosts = ({ onGetMore, type }: Props) => {
     const { hasMore, posts } = useAppSelector(selectPost);
 
     return (
@@ -16,11 +17,14 @@ const ScrollInfinityPosts = ({ onGetMore }: Props) => {
             hasMore={hasMore}
             dataLength={posts.length}
             loader={<Spiner />}
+            style={{
+                overflow: 'hidden',
+            }}
         >
             {posts.map((post) => {
                 return (
                     <div key={post._id} className="mb-6 last:mb-0">
-                        <Post post={post} />
+                        <Post post={post} type={type} />
                     </div>
                 );
             })}

@@ -8,7 +8,7 @@ import postServices from '@/services/post.services';
 import { NextPageWithLayout } from '@/types';
 
 const Following: NextPageWithLayout = () => {
-    const { page } = useAppSelector(selectPost);
+    const { page, posts } = useAppSelector(selectPost);
     const dispatch = useAppDispatch();
     const handleGetMore = useCallback(async () => {
         const posts = await postServices.fetchFollowingPosts(page, 10);
@@ -16,7 +16,16 @@ const Following: NextPageWithLayout = () => {
     }, [dispatch, page]);
     return (
         <div>
-            <ScrollInfinityPosts onGetMore={handleGetMore} />
+            {posts.length === 0 ? (
+                <p className="text-center text-subtext font-medium">
+                    Follow user to see posts.
+                </p>
+            ) : (
+                <ScrollInfinityPosts
+                    onGetMore={handleGetMore}
+                    type="FOLLOWING"
+                />
+            )}
         </div>
     );
 };

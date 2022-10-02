@@ -29,6 +29,7 @@
         "react-infinite-scroll-component": "^6.1.0",
         "react-redux": "^7.2.8",
         "react-waypoint": "^10.3.0",
+        "video-metadata-thumbnails": "^1.0.22",
         "yup": "^0.32.11"
     },
     "devDependencies": {

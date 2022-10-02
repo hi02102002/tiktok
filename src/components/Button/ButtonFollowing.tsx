@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
 import { Button } from '@/components';
-import { toggleFollowSuggestAccounts } from '@/features/accounts';
 import { toggleFollowOnPost } from '@/features/post';
 import { selectUser, toggleFollow } from '@/features/user';
 import { useAppDispatch, useAppSelector } from '@/hooks';
@@ -35,13 +34,7 @@ const ButtonFollow = ({ followers, receiverId, onFollow }: Props) => {
             if (isFollowing) {
                 const user = await usersServices.unfollowUser(receiverId);
                 dispatch(toggleFollow(user));
-                dispatch(
-                    toggleFollowSuggestAccounts({
-                        receiverId,
-                        userId: user._id,
-                        type: TypeFollow.UNFOLLOW,
-                    }),
-                );
+
                 dispatch(
                     toggleFollowOnPost({
                         type: TypeFollow.UNFOLLOW,
@@ -53,13 +46,7 @@ const ButtonFollow = ({ followers, receiverId, onFollow }: Props) => {
             } else {
                 const user = await usersServices.followUser(receiverId);
                 dispatch(toggleFollow(user));
-                dispatch(
-                    toggleFollowSuggestAccounts({
-                        receiverId,
-                        userId: user._id,
-                        type: TypeFollow.FOLLOW,
-                    }),
-                );
+
                 dispatch(
                     toggleFollowOnPost({
                         type: TypeFollow.FOLLOW,

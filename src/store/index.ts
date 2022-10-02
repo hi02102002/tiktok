@@ -1,4 +1,3 @@
-import { accountReducer } from '@/features/accounts';
 import { commentReducer } from '@/features/comments';
 import { postReducer } from '@/features/post';
 import { userReducer } from '@/features/user';
@@ -11,7 +10,6 @@ const store = configureStore({
     reducer: {
         user: userReducer,
         post: postReducer,
-        account: accountReducer,
         comment: commentReducer,
     },
 });

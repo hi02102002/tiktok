@@ -1,11 +1,15 @@
 import { useCallback, useMemo } from 'react';
 
+import Link from 'next/link';
+
 import { Avatar } from '@/components';
 import { removeComment, toggleLikeComment } from '@/features/comments';
+import { decrementTotalComment } from '@/features/post';
 import { selectUser } from '@/features/user';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import postServices from '@/services/post.services';
 import { IComment, TypeLike } from '@/types';
+import { linkToProfile } from '@/utils';
 import { toast } from 'react-hot-toast';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -84,6 +88,7 @@ const Comment = ({
     const handleRemove = useCallback(async () => {
         await postServices.removeComment(comment.postId, comment._id);
         dispatch(removeComment(comment._id));
+        dispatch(decrementTotalComment(comment.postId));
         onRemove && onRemove(comment._id);
     }, [comment._id, dispatch, onRemove, comment.postId]);
 
@@ -95,9 +100,18 @@ const Comment = ({
                 alt={comment.user.username}
             />
             <div className="flex flex-col gap-1 w-full">
-                <h3 className="font-medium leading-[1]">
-                    {comment.user.firstName} {comment.user.lastName}
-                </h3>
+                <Link
+                    href={linkToProfile(
+                        currentUser?._id as string,
+                        comment.user._id,
+                    )}
+                >
+                    <a>
+                        <h3 className="font-medium leading-[1]">
+                            {comment.user.firstName} {comment.user.lastName}
+                        </h3>
+                    </a>
+                </Link>
                 <p>{comment.content}</p>
                 <div className="flex items-center gap-3">
                     <span>3d ago</span>

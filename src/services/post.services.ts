@@ -44,6 +44,36 @@ class PostService {
             .then((value) => value.data.data.posts);
     }
 
+    public async fetchUserPosts(userId: string, page = 1, limit = 10) {
+        return await axiosClient
+            .get<
+                IRes<{
+                    posts: Array<IPost>;
+                }>
+            >(`/posts/user/${userId}`, {
+                params: {
+                    page,
+                    limit,
+                },
+            })
+            .then((value) => value.data.data.posts);
+    }
+
+    public async fetchOwnPosts(page = 1, limit = 10) {
+        return await axiosClient
+            .get<
+                IRes<{
+                    posts: Array<IPost>;
+                }>
+            >(`/posts/me`, {
+                params: {
+                    page,
+                    limit,
+                },
+            })
+            .then((value) => value.data.data.posts);
+    }
+
     public async likePost(postId: string) {
         return await axiosClient.patch(`/posts/${postId}/like`);
     }

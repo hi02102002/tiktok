@@ -1,6 +1,7 @@
 import { RootState } from '@/store';
 import { IPost, TypeFollow, TypeLike } from '@/types';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { unionBy } from 'lodash';
 import { HYDRATE } from 'next-redux-wrapper';
 
 const LIMIT = 10;
@@ -33,7 +34,10 @@ const postSlice = createSlice({
                 page: number;
             }>,
         ) => {
-            state.posts = state.posts.concat(action.payload.posts);
+            state.posts = unionBy(
+                state.posts.concat(action.payload.posts),
+                '_id',
+            );
             if (action.payload.posts.length >= LIMIT) {
                 state.hasMore = true;
                 state.page = action.payload.page + 1;
@@ -125,6 +129,31 @@ const postSlice = createSlice({
                 return post;
             });
         },
+        calcTotalLike: (
+            state,
+            {
+                payload,
+            }: PayloadAction<{
+                type: 'INCREMENT' | 'DECREMENT';
+                postId: string;
+            }>,
+        ) => {
+            state.posts = state.posts.map((post) => {
+                if (post._id === payload.postId) {
+                    return {
+                        ...post,
+                        user: {
+                            ...post.user,
+                            numLike:
+                                payload.type === 'INCREMENT'
+                                    ? post.user.numLike + 1
+                                    : post.user.numLike - 1,
+                        },
+                    };
+                }
+                return post;
+            });
+        },
     },
     extraReducers: {
         [HYDRATE]: (state, action) => {
@@ -147,6 +176,7 @@ export const {
     toggleFollowOnPost,
     decrementTotalComment,
     incrementTotalComment,
+    calcTotalLike,
 } = postSlice.actions;
 export const selectPost = (state: RootState) => state.post;
 export const postReducer = postSlice.reducer;

@@ -46,7 +46,7 @@ const PostDetail: NextPageWithLayout = () => {
                 <span>Go back</span>
             </button>
             <div
-                className="w-full bg-black rounded"
+                className="w-full bg-black rounded relative"
                 style={{
                     height: post.width < post.height ? '600px' : 'auto',
                 }}
@@ -54,8 +54,12 @@ const PostDetail: NextPageWithLayout = () => {
                 <video
                     src={post.video.url}
                     className="object-contain w-full h-full rounded"
+                    autoPlay
+                    controls
+                    loop
                 ></video>
             </div>
+            <div></div>
             <p className="my-4">{post.caption}</p>
             <div className="flex items-center justify-between mb-4">
                 <Tippy

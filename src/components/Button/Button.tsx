@@ -19,14 +19,16 @@ const Button = ({
     return (
         <button
             type="button"
-            className={cx('btn', typeButton, className)}
+            className={cx('btn', 'px-4', typeButton, className)}
             disabled={disabled}
             {...rest}
         >
             {loading && (
                 <Spiner
                     className={
-                        disabled || typeButton === 'tertiary' ? 'text-neutral-500' : ''
+                        disabled || typeButton === 'tertiary'
+                            ? 'text-neutral-500'
+                            : ''
                     }
                 />
             )}

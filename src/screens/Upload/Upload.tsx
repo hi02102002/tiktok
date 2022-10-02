@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+
 import { Button } from '@/components';
 import { LayOutOnlyHeader } from '@/components/Layout';
 import { Select } from '@/components/Select';
@@ -11,6 +14,8 @@ import { NextPageWithLayout } from '@/types';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-hot-toast';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
+import { Video } from 'video-metadata-thumbnails';
+import { IThumbnail } from 'video-metadata-thumbnails/lib/video/ithumbnail';
 
 const TYPES: Array<{
     label: string;
@@ -43,6 +48,9 @@ const Upload: NextPageWithLayout = () => {
         width: 0,
         height: 0,
     });
+    const [previewImages, setPreviewImages] = useState<Array<IThumbnail>>([]);
+    const [chooseThumb, setChooseThumb] = useState<IThumbnail | null>(null);
+
     const $videoRef = useRef<HTMLVideoElement | null>(null);
 
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
@@ -51,6 +59,7 @@ const Upload: NextPageWithLayout = () => {
         },
         onDrop,
     });
+    const router = useRouter();
 
     const handleDiscard = useCallback(() => {
         setCaption('');
@@ -61,6 +70,8 @@ const Upload: NextPageWithLayout = () => {
             height: 0,
             width: 0,
         });
+        setPreviewImages([]);
+        setChooseThumb(null);
     }, []);
 
     const handelUpload = useCallback(async () => {
@@ -68,13 +79,11 @@ const Upload: NextPageWithLayout = () => {
         try {
             setLoadingUpload(true);
             toastId = toast.loading('Uploading...');
-            const urls = await uploadServices.upload([video as File]);
-            const $video = document.createElement('video');
-            $video.src = urls[0].url;
-            $video.addEventListener('loadedmetadata', function () {
-                console.log('width:', this.videoWidth);
-                console.log('height:', this.videoHeight);
-            });
+            const urls = await uploadServices.upload([
+                video as File,
+                chooseThumb?.blob as File,
+            ]);
+
             const _postRes = await postServices.addPost({
                 allowComment,
                 caption,
@@ -84,10 +93,14 @@ const Upload: NextPageWithLayout = () => {
                 width: videoSize.width,
                 height: videoSize.height,
                 type: type.value,
+                cover: {
+                    ...urls[1],
+                },
             });
             dispatch(createPost(_postRes));
             toast.success('Create post successfully.');
             handleDiscard();
+            router.push(`/${_postRes._id}`);
         } catch (error: any) {
             console.log(error);
             toast.error('Something went wrong while create post.');
@@ -104,6 +117,8 @@ const Upload: NextPageWithLayout = () => {
         video,
         videoSize,
         type.value,
+        chooseThumb?.blob,
+        router,
     ]);
 
     useEffect(() => {
@@ -113,6 +128,21 @@ const Upload: NextPageWithLayout = () => {
                 height: this.videoHeight,
             });
         });
+    }, [video]);
+
+    useEffect(() => {
+        if (video) {
+            const videoThumbs = new Video(video as Blob);
+
+            (async () => {
+                const thumbs = await videoThumbs.getThumbnails({
+                    quality: 1,
+                    start: 0,
+                    end: 5,
+                });
+                setPreviewImages(thumbs);
+            })();
+        }
     }, [video]);
 
     return (
@@ -147,7 +177,7 @@ const Upload: NextPageWithLayout = () => {
                                 <div
                                     {...getRootProps({
                                         className:
-                                            'dropzone px-9 py-14 rounded-lg border-2 border-dashed border-neutral-300 hover:border-primary hover:bg-neutral-100/40 flex flex-col items-center cursor-pointer',
+                                            'dropzone px-9 py-14 rounded-lg border-2 border-dashed border-neutral-300 hover:border-primary hover:bg-neutral-100/40 flex flex-col items-center cursor-pointer self-center',
                                     })}
                                 >
                                     <input
@@ -155,7 +185,7 @@ const Upload: NextPageWithLayout = () => {
                                             multiple: false,
                                         })}
                                     />
-                                    <AiOutlineCloudUpload className="w-10 h-10 text-subtext" />
+                                    <AiOutlineCloudUpload className="w-10 h-10 text-subtext " />
                                     <span className="text-lg font-semibold">
                                         Select video to upload
                                     </span>
@@ -198,6 +228,53 @@ const Upload: NextPageWithLayout = () => {
                                             maxLength={150}
                                             value={caption}
                                         />
+                                    </div>
+                                    <div className="input-group">
+                                        <label className="form-label">
+                                            Cover
+                                        </label>
+                                        <div className="p-4 rounded border-[#cbd5e1] border-2">
+                                            <div className="flex items-center justify-center md:justify-start gap-2 flex-wrap ">
+                                                {previewImages.length > 0 ? (
+                                                    previewImages.map((el) => {
+                                                        return (
+                                                            <div
+                                                                key={
+                                                                    el.currentTime
+                                                                }
+                                                                onClick={() => {
+                                                                    setChooseThumb(
+                                                                        el,
+                                                                    );
+                                                                }}
+                                                                className="relative flex items-center justify-center cursor-pointer"
+                                                            >
+                                                                {!(
+                                                                    el.currentTime ===
+                                                                    chooseThumb?.currentTime
+                                                                ) && (
+                                                                    <div
+                                                                        className={`absolute w-full h-full z-10 bg-white/60`}
+                                                                    ></div>
+                                                                )}
+                                                                <Image
+                                                                    src={URL.createObjectURL(
+                                                                        el.blob as Blob,
+                                                                    )}
+                                                                    alt=""
+                                                                    width={84.2}
+                                                                    height={150}
+                                                                    objectFit="cover"
+                                                                    className="rounded relative z-[9]"
+                                                                />
+                                                            </div>
+                                                        );
+                                                    })
+                                                ) : (
+                                                    <div className="w-[84.2px] h-[150px] rounded bg-neutral-200"></div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="input-group">
                                         <label className="form-label">
@@ -247,7 +324,8 @@ const Upload: NextPageWithLayout = () => {
                                             disabled={
                                                 acceptedFiles.length === 0 ||
                                                 caption.length === 0 ||
-                                                loadingUpload
+                                                loadingUpload ||
+                                                !chooseThumb
                                             }
                                             loading={loadingUpload}
                                             onClick={handelUpload}

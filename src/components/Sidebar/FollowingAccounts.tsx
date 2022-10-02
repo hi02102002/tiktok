@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import { useWindowSize } from '@/hooks';
 import usersServices from '@/services/users.services';
 import { IUser } from '@/types';
 import classNames from 'classnames/bind';
 
+import Line from '../Line';
 import SectionUser from '../SectionUser';
 import styles from './Sidebar.module.scss';
 
@@ -17,6 +19,7 @@ const FollowingAccounts = () => {
     );
     const [page, setPage] = useState<number>(1);
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const sizeWindow = useWindowSize();
 
     const handleSeeMore = () => {
         setPage(page + 1);
@@ -37,39 +40,42 @@ const FollowingAccounts = () => {
         })();
     }, [page]);
 
-    return (
-        <div className={cx('list-accounts')}>
-            <span className={cx('title')}>Following accounts</span>
-            {followingAccounts.length === 0 ? (
-                <span className="block text-center text-subtext font-medium">
-                    No account following.
-                </span>
-            ) : (
-                <>
-                    <ul>
-                        {followingAccounts.map((account) => {
-                            return (
-                                <li key={account._id}>
-                                    <SectionUser
-                                        user={account}
-                                        className={cx('account')}
-                                        classNameInfo={cx('info')}
-                                    />
-                                </li>
-                            );
-                        })}
-                    </ul>
-                    {hasMore && (
-                        <button
-                            className={cx('btn-see')}
-                            onClick={handleSeeMore}
-                        >
-                            See more
-                        </button>
-                    )}
-                </>
-            )}
-        </div>
+    return sizeWindow.width < 1024 && followingAccounts.length === 0 ? null : (
+        <>
+            <Line />
+            <div className={cx('list-accounts')}>
+                <span className={cx('title')}>Following accounts</span>
+                {followingAccounts.length === 0 ? (
+                    <span className="block text-center text-subtext font-medium">
+                        No account following.
+                    </span>
+                ) : (
+                    <>
+                        <ul>
+                            {followingAccounts.map((account) => {
+                                return (
+                                    <li key={account._id}>
+                                        <SectionUser
+                                            user={account}
+                                            className={cx('account')}
+                                            classNameInfo={cx('info')}
+                                        />
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                        {hasMore && (
+                            <button
+                                className={cx('btn-see')}
+                                onClick={handleSeeMore}
+                            >
+                                See more
+                            </button>
+                        )}
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 

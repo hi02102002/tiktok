@@ -103,7 +103,12 @@ const Search = () => {
                             </h3>
                             {searchResult.map((user) => {
                                 return (
-                                    <li key={user._id}>
+                                    <li
+                                        key={user._id}
+                                        onClick={() => {
+                                            setShow(false);
+                                        }}
+                                    >
                                         <SectionUser
                                             user={user}
                                             sizeAvatar={32}

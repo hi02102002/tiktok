@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 
 import { selectUser } from '@/features/user';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector, useWindowSize } from '@/hooks';
 import usersServices from '@/services/users.services';
 import { IUser } from '@/types';
 import classNames from 'classnames/bind';
 
+import Line from '../Line';
 import SectionUserWithProfile from './SectionUserWithProfile';
 import styles from './Sidebar.module.scss';
 
@@ -20,6 +21,7 @@ const SuggestAccounts = () => {
     const dispatch = useAppDispatch();
     const [suggestAccounts, setSuggestAccounts] = useState<Array<IUser>>([]);
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const sizeWindow = useWindowSize();
     const handleToggleSee = () => {
         setIsSeeMore(!isSeeMore);
     };
@@ -45,38 +47,58 @@ const SuggestAccounts = () => {
         })();
     }, [user?._id, dispatch]);
 
-    return (
-        <div className={cx('list-accounts')}>
-            <span className={cx('title')}>Suggested accounts</span>
-            <ul>
-                {isSeeMore
-                    ? suggestAccounts.slice(0, LIMIT).map((account) => {
-                          return (
-                              <li key={account._id}>
-                                  <SectionUserWithProfile
-                                      user={account}
-                                      setAccounts={setSuggestAccounts}
-                                  />
-                              </li>
-                          );
-                      })
-                    : suggestAccounts.map((account) => {
-                          return (
-                              <li key={account._id}>
-                                  <SectionUserWithProfile
-                                      user={account}
-                                      setAccounts={setSuggestAccounts}
-                                  />
-                              </li>
-                          );
-                      })}
-            </ul>
-            {hasMore && (
-                <button className={cx('btn-see')} onClick={handleToggleSee}>
-                    {isSeeMore ? ' See more' : 'See less'}
-                </button>
-            )}
-        </div>
+    return sizeWindow.width < 1024 && suggestAccounts.length === 0 ? null : (
+        <>
+            <Line />
+            <div className={cx('list-accounts')}>
+                <span className={cx('title')}>Suggested accounts</span>
+                {suggestAccounts.length === 0 ? (
+                    <span className="hidden lg:block text-center text-subtext font-medium">
+                        No account suggested.
+                    </span>
+                ) : (
+                    <>
+                        <ul>
+                            {isSeeMore
+                                ? suggestAccounts
+                                      .slice(0, LIMIT)
+                                      .map((account) => {
+                                          return (
+                                              <li key={account._id}>
+                                                  <SectionUserWithProfile
+                                                      user={account}
+                                                      setAccounts={
+                                                          setSuggestAccounts
+                                                      }
+                                                  />
+                                              </li>
+                                          );
+                                      })
+                                : suggestAccounts.map((account) => {
+                                      return (
+                                          <li key={account._id}>
+                                              <SectionUserWithProfile
+                                                  user={account}
+                                                  setAccounts={
+                                                      setSuggestAccounts
+                                                  }
+                                              />
+                                          </li>
+                                      );
+                                  })}
+                        </ul>
+                        {hasMore && (
+                            <button
+                                className={cx('btn-see')}
+                                onClick={handleToggleSee}
+                            >
+                                {isSeeMore ? ' See more' : 'See less'}
+                            </button>
+                        )}
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 

@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { Avatar, BriefProfile, Button, ButtonFollow } from '@/components';
-import { selectPost, toggleLike } from '@/features/post';
+import { calcTotalLike, selectPost, toggleLike } from '@/features/post';
 import { selectUser } from '@/features/user';
 import { useAppDispatch, useAppSelector, useElementOnScreen } from '@/hooks';
 import postServices from '@/services/post.services';
 import { IPost, TypeLike } from '@/types';
+import { linkToProfile } from '@/utils';
 import Tippy from '@tippyjs/react/headless';
 import { toast } from 'react-hot-toast';
 import { AiFillHeart, AiFillMessage } from 'react-icons/ai';
@@ -15,8 +17,9 @@ import { RiShareForwardFill } from 'react-icons/ri';
 
 interface Props {
     post: IPost;
+    type: 'FOLLOWING' | 'HOME';
 }
-const Post = ({ post }: Props) => {
+const Post = ({ post, type }: Props) => {
     const dispatch = useAppDispatch();
     const user = useAppSelector(selectUser);
     const isLiked = useMemo(
@@ -32,6 +35,8 @@ const Post = ({ post }: Props) => {
         threshold: 1,
     });
 
+    const router = useRouter();
+
     const handleToggleLike = useCallback(async () => {
         if (!user) {
             toast.error('You must login to like this post');
@@ -46,6 +51,12 @@ const Post = ({ post }: Props) => {
                     type: TypeLike.UNLIKE,
                 }),
             );
+            dispatch(
+                calcTotalLike({
+                    type: 'DECREMENT',
+                    postId: post._id,
+                }),
+            );
         } else {
             await postServices.likePost(post._id);
             dispatch(
@@ -53,6 +64,12 @@ const Post = ({ post }: Props) => {
                     postId: post._id,
                     userId: user?._id as string,
                     type: TypeLike.LIKE,
+                }),
+            );
+            dispatch(
+                calcTotalLike({
+                    type: 'INCREMENT',
+                    postId: post._id,
                 }),
             );
         }
@@ -76,9 +93,9 @@ const Post = ({ post }: Props) => {
                 />
             </div>
             <div className="flex-1">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-4 gap-2">
                     <div className="flex items-center gap-2">
-                        <div className="sm:hidden block">
+                        <div className="sm:hidden block flex-shrink-0">
                             <Avatar
                                 src={post.user.avatar}
                                 alt={post.user.username}
@@ -105,21 +122,32 @@ const Post = ({ post }: Props) => {
                                     delay={800}
                                     placement="bottom"
                                 >
-                                    <h3 className="text-lg font-bold hover:underline transition-all line-clamp-1">
-                                        {post.user.firstName}{' '}
-                                        {post.user.lastName}
-                                    </h3>
+                                    <div>
+                                        <Link
+                                            href={linkToProfile(
+                                                user?._id as string,
+                                                post.user._id,
+                                            )}
+                                        >
+                                            <a>
+                                                <h3 className="text-lg font-bold hover:underline transition-all line-clamp-1 cursor-pointer">
+                                                    {post.user.firstName}{' '}
+                                                    {post.user.lastName}
+                                                </h3>
+                                            </a>
+                                        </Link>
+                                    </div>
                                 </Tippy>
                                 <span className="text-subtext text-sm sm:block hidden">
                                     {post.user.username}
                                 </span>
                             </div>
-                            <p className="text-neutral-700 line-clamp-2">
+                            <p className="text-neutral-700 line-clamp-2 break-all">
                                 {post.caption}
                             </p>
                         </div>
                     </div>
-                    {!(user?._id === post.user._id) && (
+                    {!(user?._id === post.user._id) && type === 'HOME' && (
                         <ButtonFollow
                             followers={post.user.followers}
                             receiverId={post.user._id}
@@ -150,13 +178,13 @@ const Post = ({ post }: Props) => {
                     <div className="sm:self-end flex sm:flex-col gap-4 items-start">
                         <div className="flex flex-col gap-1 items-center justify-center">
                             <Button
-                                className="w-12 h-12 !min-w-0 bg-neutral-100 hove200g-neutral-300 rounded-full"
+                                className="w-12 h-12 flex-shrink-0 !min-w-0 bg-neutral-100 hove200g-neutral-300 rounded-full"
                                 onClick={handleToggleLike}
                             >
                                 <AiFillHeart
                                     className={`${
                                         isLiked ? 'text-rose-500' : ''
-                                    } icon-24`}
+                                    } icon-24 flex-shrink-0`}
                                 />
                             </Button>
                             <span className="text-subtext uppercase text-sm font-semibold">
@@ -167,7 +195,7 @@ const Post = ({ post }: Props) => {
                             <a>
                                 <div className="flex flex-col gap-1 items-center justify-center">
                                     <Button className="w-12 h-12 !min-w-0 bg-neutral-200 hover:bg-neutral-300 rounded-full">
-                                        <AiFillMessage className="icon-24" />
+                                        <AiFillMessage className="icon-24 flex-shrink-0" />
                                     </Button>
                                     <span className="text-subtext uppercase text-sm font-semibold">
                                         {post.totalComment}
@@ -176,7 +204,7 @@ const Post = ({ post }: Props) => {
                             </a>
                         </Link>
                         <Button className="w-12 h-12 !min-w-0 bg-neutral-200 hover:bg-neutral-300 rounded-full">
-                            <RiShareForwardFill className="icon-24" />
+                            <RiShareForwardFill className="icon-24 flex-shrink-0" />
                         </Button>
                     </div>
                 </div>

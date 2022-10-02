@@ -7,15 +7,12 @@ import { selectUser } from '@/features/user';
 import { useAppSelector } from '@/hooks';
 import classNames from 'classnames/bind';
 
+import Line from '../Line';
 import FollowingAccounts from './FollowingAccounts';
 import styles from './Sidebar.module.scss';
 import SuggestAccounts from './SuggestAccounts';
 
 const cx = classNames.bind(styles);
-
-const Line = () => {
-    return <div className="h-[1px] w-full bg-neutral-200"></div>;
-};
 
 const MAIN_NAVIGATION = [
     {
@@ -149,16 +146,10 @@ const Sidebar = () => {
                                 Login
                             </Button>
                         </div>
-                        <Line />
                     </>
                 )}
                 <SuggestAccounts />
-                {user && (
-                    <>
-                        <Line />
-                        <FollowingAccounts />
-                    </>
-                )}
+                {user && <FollowingAccounts />}
             </div>
         </aside>
     );
