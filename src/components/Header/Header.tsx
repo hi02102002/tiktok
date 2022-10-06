@@ -1,21 +1,22 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import { Button, Logo } from '@/components';
+import { Avatar, Button, Logo } from '@/components';
 import { ROUTES } from '@/constants';
 import { selectUser } from '@/features/user';
 import { useAppSelector } from '@/hooks';
+import Tippy from '@tippyjs/react/headless';
 import { toast } from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { FiMenu } from 'react-icons/fi';
 
+import Dropdown from './Dropdown';
 import Search from './Search';
 
 const Header = () => {
     const user = useAppSelector(selectUser);
     const router = useRouter();
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
     const navigateToUpload = useCallback(() => {
         if (!user) {
@@ -31,7 +32,7 @@ const Header = () => {
                 <nav className="flex items-center gap-4 justify-between">
                     <Logo />
                     <Search />
-                    <div className="hidden sm:flex items-center gap-4">
+                    <div className="flex items-center gap-4">
                         <Button
                             typeButton="tertiary"
                             iconLeft={<AiOutlinePlus className="icon-20" />}
@@ -40,14 +41,38 @@ const Header = () => {
                             <span>Upload</span>
                         </Button>
                         {user ? (
-                            <div>
-                                <Image
-                                    src={user.avatar}
-                                    alt={user.username}
-                                    width={40}
-                                    height={40}
-                                />
-                            </div>
+                            <Tippy
+                                interactive
+                                render={(attrs) => {
+                                    return (
+                                        <div {...attrs}>
+                                            <Dropdown
+                                                onClose={() =>
+                                                    setShowDropdown(false)
+                                                }
+                                            />
+                                        </div>
+                                    );
+                                }}
+                                visible={showDropdown}
+                                onClickOutside={() => {
+                                    setShowDropdown(false);
+                                }}
+                                placement="bottom"
+                            >
+                                <div
+                                    onClick={() => {
+                                        setShowDropdown(!showDropdown);
+                                    }}
+                                >
+                                    <Avatar
+                                        src={user.avatar as string}
+                                        alt={user.username}
+                                        size={40}
+                                        className="cursor-pointer"
+                                    />
+                                </div>
+                            </Tippy>
                         ) : (
                             <Button
                                 typeButton="primary"
@@ -59,9 +84,6 @@ const Header = () => {
                             </Button>
                         )}
                     </div>
-                    <button className="block sm:hidden">
-                        <FiMenu className="w-8 h-8" />
-                    </button>
                 </nav>
             </div>
         </header>

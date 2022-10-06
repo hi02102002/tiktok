@@ -18,8 +18,10 @@ const ParentComment = ({ comment }: Props) => {
     const [pageChildComments, setPageChildComments] = useState<number>(1);
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [showInputReply, setShowInputReply] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const handelViewMore = useCallback(async () => {
         try {
+            setLoading(true);
             const comments = await postServices.getChildComments(
                 comment.postId,
                 comment._id,
@@ -37,6 +39,9 @@ const ParentComment = ({ comment }: Props) => {
             setPageChildComments(pageChildComments + 1);
         } catch (error) {
             console.log(error);
+            setLoading(false);
+        } finally {
+            setLoading(false);
         }
     }, [comment._id, comment.postId, pageChildComments]);
 
@@ -80,6 +85,7 @@ const ParentComment = ({ comment }: Props) => {
                 }}
                 onLike={handleToggleLikeChildComment}
                 onRemove={handleRemoveChildComment}
+                loadingViewMore={loading}
             />
             {showInputReply && (
                 <InputComment

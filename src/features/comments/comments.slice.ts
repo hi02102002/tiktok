@@ -41,7 +41,6 @@ const commentSlice = createSlice({
             state.comments = state.comments.concat(comments);
             if (comments.length >= LIMIT) {
                 state.hasMore = true;
-                state.page = page + 1;
             } else {
                 state.hasMore = false;
             }

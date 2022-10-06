@@ -7,7 +7,7 @@ export const getServerSideProps = withRoute({ isProtected: false })(
     async (ctx, dispatch) => {
         const posts = await postServices.fetchPostsHome(1, 10);
         dispatch(unmountPosts());
-        dispatch(fetchPosts({ posts, page: 1 }));
+        dispatch(fetchPosts({ posts }));
 
         return {
             props: {},

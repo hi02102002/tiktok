@@ -8,14 +8,12 @@ const LIMIT = 10;
 
 interface IInitialState {
     posts: Array<IPost>;
-    page: number;
     hasMore: boolean;
     currentPost: null | IPost;
 }
 
 const initialState: IInitialState = {
     posts: [],
-    page: 1,
     hasMore: true,
     currentPost: null,
 };
@@ -31,7 +29,6 @@ const postSlice = createSlice({
             state,
             action: PayloadAction<{
                 posts: Array<IPost>;
-                page: number;
             }>,
         ) => {
             state.posts = unionBy(
@@ -40,7 +37,6 @@ const postSlice = createSlice({
             );
             if (action.payload.posts.length >= LIMIT) {
                 state.hasMore = true;
-                state.page = action.payload.page + 1;
             } else {
                 state.hasMore = false;
             }
@@ -72,7 +68,6 @@ const postSlice = createSlice({
         },
         unmountPosts: (state) => {
             state.hasMore = true;
-            state.page = 1;
             state.posts = [];
         },
         setCurrentPost: (state, action: PayloadAction<IPost | null>) => {

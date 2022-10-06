@@ -1,5 +1,5 @@
 .sidebar {
-    @apply max-w-sidebarSmall lg:max-w-sidebar fixed mt-header h-[calc(100vh_-_60px)] w-full overflow-y-auto top-0 md:block hidden left-0 lg:left-[unset];
+    @apply max-w-sidebarSmall lg:max-w-sidebar fixed mt-header h-[calc(100vh_-_60px)] w-full overflow-y-auto top-0 md:block hidden left-0 lg:left-[unset] z-50;
 }
 
 .wrapper {

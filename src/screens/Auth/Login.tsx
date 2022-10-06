@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -74,82 +75,87 @@ const Login: NextPageWithLayout = () => {
     };
 
     return (
-        <div className={cx('auth')}>
-            <div className="app-container flex items-center justify-center">
-                <div className={cx('auth-content')}>
-                    <h3 className={cx('title')}>Login</h3>
-                    <form
-                        className="flex gap-6 flex-col"
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        <div className="input-group">
-                            <label className="form-label">Email</label>
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                className={`form-input ${
-                                    errors.email?.message && 'error'
-                                }`}
-                                {...register('email')}
-                                autoFocus
-                            />
-                            {errors.email?.message && (
-                                <p className="form-error">
-                                    {errors.email?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="input-group">
-                            <label className="form-label">Password</label>
-                            <div className="relative">
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    className={`form-input ${
-                                        errors.password?.message && 'error'
-                                    }`}
-                                    ref={(e) => {
-                                        passwordRef.current = e;
-                                        refPasswordFormHook(e);
-                                    }}
-                                    {...registerPassword}
-                                />
-                                <ButtonTogglePassword
-                                    hidden={hidden}
-                                    onToggle={onToggle}
-                                    isError={!!errors.password?.message}
-                                />
-                            </div>
-                            {errors.password?.message && (
-                                <p className="form-error">
-                                    {errors.password?.message}
-                                </p>
-                            )}
-                        </div>
-                        <Link href={ROUTES.FORGET_PASSWORD}>
-                            <a className="link">Forgot password ? </a>
-                        </Link>
-                        <Button
-                            type="submit"
-                            loading={loading}
-                            disabled={loading}
-                            className={cx('btn')}
-                            typeButton="primary"
+        <>
+            <Head>
+                <title>Tiktok - Login</title>
+            </Head>
+            <div className={cx('auth')}>
+                <div className="app-container flex items-center justify-center">
+                    <div className={cx('auth-content')}>
+                        <h3 className={cx('title')}>Login</h3>
+                        <form
+                            className="flex gap-6 flex-col"
+                            onSubmit={handleSubmit(onSubmit)}
                         >
-                            Login
-                        </Button>
-                    </form>
-                    <div className="mt-6 text-center ">
-                        <p>
-                            Don&apos;t have account?{' '}
-                            <Link href={ROUTES.REGISTER}>
-                                <a className="link">Register</a>
+                            <div className="input-group">
+                                <label className="form-label">Email</label>
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    className={`form-input ${
+                                        errors.email?.message && 'error'
+                                    }`}
+                                    {...register('email')}
+                                    autoFocus
+                                />
+                                {errors.email?.message && (
+                                    <p className="form-error">
+                                        {errors.email?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="input-group">
+                                <label className="form-label">Password</label>
+                                <div className="relative">
+                                    <input
+                                        type="password"
+                                        placeholder="Password"
+                                        className={`form-input ${
+                                            errors.password?.message && 'error'
+                                        }`}
+                                        ref={(e) => {
+                                            passwordRef.current = e;
+                                            refPasswordFormHook(e);
+                                        }}
+                                        {...registerPassword}
+                                    />
+                                    <ButtonTogglePassword
+                                        hidden={hidden}
+                                        onToggle={onToggle}
+                                        isError={!!errors.password?.message}
+                                    />
+                                </div>
+                                {errors.password?.message && (
+                                    <p className="form-error">
+                                        {errors.password?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <Link href={ROUTES.FORGET_PASSWORD}>
+                                <a className="link">Forgot password ? </a>
                             </Link>
-                        </p>
+                            <Button
+                                type="submit"
+                                loading={loading}
+                                disabled={loading}
+                                className={cx('btn')}
+                                typeButton="primary"
+                            >
+                                Login
+                            </Button>
+                        </form>
+                        <div className="mt-6 text-center ">
+                            <p>
+                                Don&apos;t have account?{' '}
+                                <Link href={ROUTES.REGISTER}>
+                                    <a className="link">Register</a>
+                                </Link>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -19,19 +19,14 @@ const Button = ({
     return (
         <button
             type="button"
-            className={cx('btn', 'px-4', typeButton, className)}
+            className={cx('btn', 'px-4', typeButton, className, {
+                loading,
+                disabled,
+            })}
             disabled={disabled}
             {...rest}
         >
-            {loading && (
-                <Spiner
-                    className={
-                        disabled || typeButton === 'tertiary'
-                            ? 'text-neutral-500'
-                            : ''
-                    }
-                />
-            )}
+            {loading && <Spiner className={cx('spiner')} />}
             {!loading && iconLeft}
             {children}
             {!loading && iconRight}

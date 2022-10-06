@@ -49,4 +49,9 @@
             pointer-events: none;
         }
     }
+
+    &.loading,
+    &.disabled .spiner {
+        @apply text-neutral-500;
+    }
 }

@@ -17,7 +17,6 @@ const BriefProfile = ({ user, onFollow }: Props) => {
                     <Avatar src={user.avatar} alt={user.username} size={44} />
                     {!(currentUser?._id === user._id) && (
                         <ButtonFollow
-                            followers={user.followers}
                             receiverId={user._id}
                             onFollow={onFollow}
                         />

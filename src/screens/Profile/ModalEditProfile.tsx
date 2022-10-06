@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Avatar, Button, Line, Modal } from '@/components';
 import { selectUser, updateUser } from '@/features/user';
@@ -32,6 +32,8 @@ const ModalEditProfile = ({ onClose }: Props) => {
         avatar: null,
     });
 
+    const inputAvatarRef = useRef<HTMLInputElement | null>(null);
+
     const disabled = useMemo(() => {
         return (
             info.username.trim().length === 0 ||
@@ -40,6 +42,7 @@ const ModalEditProfile = ({ onClose }: Props) => {
             (info.username.trim() === user.username &&
                 info.firstName.trim() === user.firstName &&
                 info.lastName.trim() === user.lastName &&
+                info.avatar === null &&
                 user.bio === info.bio.trim()) ||
             loading
         );
@@ -87,7 +90,7 @@ const ModalEditProfile = ({ onClose }: Props) => {
                 <div className="flex items-center justify-between p-4">
                     <h3 className="text-lg font-medium">Edit profile</h3>
                     <button onClick={onClose}>
-                        <IoCloseSharp />
+                        <IoCloseSharp className="icon-24" />
                     </button>
                 </div>
                 <Line />
@@ -97,7 +100,12 @@ const ModalEditProfile = ({ onClose }: Props) => {
                             <label className="form-label">Profile photo</label>
                         </div>
                         <div className="flex items-center justify-center flex-1">
-                            <div className="relative cursor-pointer">
+                            <div
+                                className="relative cursor-pointer"
+                                onClick={() => {
+                                    inputAvatarRef.current?.click();
+                                }}
+                            >
                                 <Avatar
                                     src={
                                         info.avatar
@@ -110,6 +118,25 @@ const ModalEditProfile = ({ onClose }: Props) => {
                                 <button className="w-8 h-8 flex items-center justify-center bg-white absolute -right-1 bottom-1 rounded-full border border-neutral-400">
                                     <FiEdit className="icon-16 " />
                                 </button>
+                                <input
+                                    type="file"
+                                    accept="image/jpeg, image/png"
+                                    className="hidden"
+                                    ref={inputAvatarRef}
+                                    onChange={(e) => {
+                                        setInfo((prevState) => {
+                                            const file = e.target.files?.[0];
+                                            console.log(file);
+                                            if (file) {
+                                                return {
+                                                    ...prevState,
+                                                    avatar: file,
+                                                };
+                                            }
+                                            return prevState;
+                                        });
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>

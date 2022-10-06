@@ -10,10 +10,10 @@ export const getServerSideProps = withRoute({ isProtected: false })(
     async (ctx, dispatch) => {
         const postId = ctx.params?.postId as string;
         const post = await postServices.getOnePost(postId);
-        const comments = await postServices.getComments(postId);
+        const comments = await postServices.getComments(postId, 1, 10);
         dispatch(unmountPosts());
         dispatch(unmountComments());
-        dispatch(fetchPosts({ posts: [post], page: 1 }));
+        dispatch(fetchPosts({ posts: [post] }));
         dispatch(fetchComments({ comments, page: 1 }));
         return {
             props: {},

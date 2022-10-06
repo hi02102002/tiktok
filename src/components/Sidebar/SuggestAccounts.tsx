@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector, useWindowSize } from '@/hooks';
 import usersServices from '@/services/users.services';
 import { IUser } from '@/types';
 import classNames from 'classnames/bind';
+import Skeleton from 'react-loading-skeleton';
 
 import Line from '../Line';
 import SectionUserWithProfile from './SectionUserWithProfile';
@@ -52,7 +53,9 @@ const SuggestAccounts = () => {
             <Line />
             <div className={cx('list-accounts')}>
                 <span className={cx('title')}>Suggested accounts</span>
-                {suggestAccounts.length === 0 ? (
+                {loading ? (
+                    <Skeleton height={48} className="rounded" count={3} />
+                ) : suggestAccounts.length === 0 ? (
                     <span className="hidden lg:block text-center text-subtext font-medium">
                         No account suggested.
                     </span>

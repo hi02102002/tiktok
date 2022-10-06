@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Avatar } from '@/components';
+import { Avatar, Spiner } from '@/components';
 import { addComment } from '@/features/comments';
 import { incrementTotalComment } from '@/features/post';
 import { selectUser } from '@/features/user';
@@ -25,21 +25,30 @@ const InputComment = ({
     const user = useAppSelector(selectUser);
     const [textComment, setTextComment] = useState<string>('');
     const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState<boolean>(false);
     const handleAddComment = useCallback(async () => {
-        if (!user) {
-            toast.error('You must login to comment this post.');
-            return;
+        try {
+            if (!user) {
+                toast.error('You must login to comment this post.');
+                return;
+            }
+            setLoading(true);
+            const comment = await postServices.addComment(
+                postId,
+                textComment,
+                parentCommentId as string,
+            );
+            setTextComment('');
+            dispatch(incrementTotalComment(postId));
+            onComment && onComment(comment);
+            if (!isReply) {
+                dispatch(addComment(comment));
+            }
+        } catch (error) {
+            setLoading(false);
         }
-        const comment = await postServices.addComment(
-            postId,
-            textComment,
-            parentCommentId as string,
-        );
-        setTextComment('');
-        dispatch(incrementTotalComment(postId));
-        onComment && onComment(comment);
-        if (!isReply) {
-            dispatch(addComment(comment));
+        {
+            setLoading(false);
         }
     }, [
         parentCommentId,
@@ -53,12 +62,14 @@ const InputComment = ({
 
     return (
         <div className="flex items-center gap-3 w-full">
-            <Avatar
-                src={user?.avatar as string}
-                alt={user?.username}
-                size={44}
-                className="w-full"
-            />
+            <div className="flex-shrink-0">
+                <Avatar
+                    src={user?.avatar as string}
+                    alt={user?.username}
+                    size={44}
+                    className="w-full "
+                />
+            </div>
             <input
                 type="text"
                 className="form-input"
@@ -70,10 +81,14 @@ const InputComment = ({
             />
             <button
                 disabled={textComment.length === 0}
-                className="text-primary disabled:text-neutral-600 font-medium"
+                className="text-primary disabled:text-neutral-600 font-medium w-10 h-10 flex items-center justify-center"
                 onClick={handleAddComment}
             >
-                Post
+                {loading ? (
+                    <Spiner className="!text-neutral-500" />
+                ) : (
+                    <span>Post</span>
+                )}
             </button>
         </div>
     );

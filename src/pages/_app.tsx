@@ -10,6 +10,7 @@ import { NextPageWithLayout } from '@/types';
 import { SessionProvider } from 'next-auth/react';
 import nProgress from 'nprogress';
 import { Toaster } from 'react-hot-toast';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 type AppPropsWithLayout = AppProps & {
     Component: NextPageWithLayout;

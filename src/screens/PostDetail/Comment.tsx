@@ -9,10 +9,10 @@ import { selectUser } from '@/features/user';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import postServices from '@/services/post.services';
 import { IComment, TypeLike } from '@/types';
-import { linkToProfile } from '@/utils';
 import { toast } from 'react-hot-toast';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { IoIosArrowDown } from 'react-icons/io';
+import ReactTimeago from 'react-timeago';
 
 interface Props {
     comment: IComment;
@@ -22,6 +22,7 @@ interface Props {
     onShowReply: () => void;
     onLike?: (commentId: string, userId: string, type: TypeLike) => void;
     onRemove?: (commentId: string) => void;
+    loadingViewMore: boolean;
 }
 
 const Comment = ({
@@ -32,6 +33,7 @@ const Comment = ({
     onShowReply,
     onLike,
     onRemove,
+    loadingViewMore,
 }: Props) => {
     const currentUser = useAppSelector(selectUser);
 
@@ -94,18 +96,15 @@ const Comment = ({
 
     return (
         <div className="flex gap-3 items-start">
-            <Avatar
-                size={44}
-                src={comment.user.avatar}
-                alt={comment.user.username}
-            />
+            <div className="flex-shrink-0">
+                <Avatar
+                    size={44}
+                    src={comment.user.avatar}
+                    alt={comment.user.username}
+                />
+            </div>
             <div className="flex flex-col gap-1 w-full">
-                <Link
-                    href={linkToProfile(
-                        currentUser?._id as string,
-                        comment.user._id,
-                    )}
-                >
+                <Link href={`/user/${comment.user._id}`}>
                     <a>
                         <h3 className="font-medium leading-[1]">
                             {comment.user.firstName} {comment.user.lastName}
@@ -114,7 +113,7 @@ const Comment = ({
                 </Link>
                 <p>{comment.content}</p>
                 <div className="flex items-center gap-3">
-                    <span>3d ago</span>
+                    <ReactTimeago date={comment.createdAt} />
                     <div className="flex items-center gap-2">
                         <span>{comment.usersLiked.length}</span>
                         <button onClick={handleLike}>
@@ -144,6 +143,7 @@ const Comment = ({
                                     onShowReply={onShowReply}
                                     onLike={onLike}
                                     onRemove={onRemove}
+                                    loadingViewMore={loadingViewMore}
                                 />
                             );
                         })}
@@ -153,9 +153,18 @@ const Comment = ({
                     <button
                         className="text-neutral-500 font-medium flex items-center gap-1 mb-1"
                         onClick={onViewMoreComment}
+                        disabled={loadingViewMore}
                     >
-                        <span className="leading-[1]">View more replies</span>
-                        <IoIosArrowDown className="icon-16" />
+                        {loadingViewMore ? (
+                            <span>Loading...</span>
+                        ) : (
+                            <>
+                                <span className="leading-[1]">
+                                    View more replies
+                                </span>
+                                <IoIosArrowDown className="icon-16" />
+                            </>
+                        )}
                     </button>
                 )}
             </div>

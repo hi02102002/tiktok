@@ -91,13 +91,18 @@ class PostService {
             .then((value) => value.data.data.post);
     }
 
-    public async getComments(postId: string) {
+    public async getComments(postId: string, page = 1, limit = 10) {
         return await axiosClient
             .get<
                 IRes<{
                     comments: Array<IComment>;
                 }>
-            >(`/posts/${postId}/comments`)
+            >(`/posts/${postId}/comments`, {
+                params: {
+                    page,
+                    limit,
+                },
+            })
             .then((value) => value.data.data.comments);
     }
 

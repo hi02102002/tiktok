@@ -1,4 +1,6 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
+
+import Head from 'next/head';
 
 import { ScrollInfinityPosts } from '@/components';
 import { DefaultLayout } from '@/components/Layout';
@@ -8,16 +10,27 @@ import postServices from '@/services/post.services';
 import { NextPageWithLayout } from '@/types';
 
 const Home: NextPageWithLayout = () => {
-    const { page } = useAppSelector(selectPost);
+    const [page, setPage] = useState<number>(1);
+    const { posts } = useAppSelector(selectPost);
     const dispatch = useAppDispatch();
     const handleGetMore = useCallback(async () => {
-        const posts = await postServices.fetchPostsHome(page, 10);
-        dispatch(fetchPosts({ posts, page: page + 1 }));
+        const posts = await postServices.fetchPostsHome(page + 1, 10);
+        dispatch(fetchPosts({ posts }));
+        setPage(page + 1);
     }, [dispatch, page]);
 
     return (
         <div>
-            <ScrollInfinityPosts onGetMore={handleGetMore} type="HOME" />
+            <Head>
+                <title>Tiktok - Home</title>
+            </Head>
+            {posts.length === 0 ? (
+                <p className="text-center text-subtext font-medium">
+                    No recently posts.
+                </p>
+            ) : (
+                <ScrollInfinityPosts onGetMore={handleGetMore} type="HOME" />
+            )}
         </div>
     );
 };

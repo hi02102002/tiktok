@@ -1,11 +1,4 @@
-import {
-    ChangeEvent,
-    MouseEvent,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -35,24 +28,6 @@ const Search = () => {
     const $inputRef = useRef<HTMLInputElement | null>(null);
     const { width: widthSearchDropdown, parentRef: $searchWrapperRef } =
         useGetWidthParent();
-
-    const handleNavigateToSearch = useCallback(
-        (e: MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
-            if (!debounceValue.trim()) {
-                return;
-            }
-            router.push({
-                pathname: '/search',
-                query: {
-                    q: debounceValue,
-                    page: PAGE,
-                    limit: LIMIT,
-                },
-            });
-        },
-        [debounceValue, router],
-    );
 
     const handleCancel = () => {
         setShow(false);
@@ -84,7 +59,7 @@ const Search = () => {
     }, [debounceValue]);
 
     return (
-        <div>
+        <div className="md:block hidden">
             <Tippy
                 render={(attrs) => (
                     <div
@@ -159,7 +134,6 @@ const Search = () => {
                         <button
                             type="button"
                             className="px-4 py-2 -mx-4 -my-2 self-stretch hover:bg-neutral-200"
-                            onClick={handleNavigateToSearch}
                         >
                             <HiOutlineSearch className="icon-24 text-neutral-500 " />
                         </button>

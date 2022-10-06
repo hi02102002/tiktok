@@ -17,7 +17,6 @@ interface Props {
 const SectionUserWithProfile = ({ user, setAccounts }: Props) => {
     const handelFollow: onFollow = useCallback(
         (type, userId, receiverId) => {
-            console.log('hi');
             setAccounts((accountsState) => {
                 return accountsState.map((account) => {
                     if (account._id === receiverId) {
@@ -54,6 +53,7 @@ const SectionUserWithProfile = ({ user, setAccounts }: Props) => {
                 popperOptions={{
                     strategy: 'fixed',
                 }}
+                zIndex={1000}
             >
                 <div>
                     <SectionUser

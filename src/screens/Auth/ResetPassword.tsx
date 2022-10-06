@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import axios from '@/axios';
@@ -65,74 +66,81 @@ const ResetPassword = () => {
     };
 
     return (
-        <div>
-            <header className="h-header fixed top-0 left-0 right-0 flex items-center bg-white shadow-header">
-                <div className="app-container">
-                    <Logo />
-                </div>
-            </header>
-            <div className={cx('auth')}>
-                <div className="app-container flex items-center justify-center">
-                    <div className={cx('auth-content')}>
-                        <div className="flex flex-col text-center  items-center">
-                            <AiOutlineUnlock className="w-24 h-24 mb-6 " />
-                            <h3 className="font-semibold mb-4">
-                                Reset your password
-                            </h3>
-                            <form
-                                className="w-full mt-6 space-y-4"
-                                onSubmit={handleSubmit(onSubmit)}
-                            >
-                                <div className="input-group">
-                                    <label className="form-label text-start">
-                                        Password
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            type="password"
-                                            placeholder="New password"
-                                            className={`form-input ${
-                                                errors.password?.message &&
-                                                'error'
-                                            }`}
-                                            ref={(e) => {
-                                                passwordRef.current = e;
-                                                refPasswordFormHook(e);
-                                            }}
-                                            {...registerPassword}
-                                        />
-                                        <ButtonTogglePassword
-                                            hidden={passwordHidden}
-                                            onToggle={onPasswordToggle}
-                                            isError={!!errors.password?.message}
-                                        />
-                                    </div>
-                                    {errors.password?.message && (
-                                        <p className="form-error text-start">
-                                            {errors.password?.message}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <Button
-                                    className={cx(
-                                        'btn',
-                                        'text-start',
-                                        'w-full',
-                                    )}
-                                    loading={loading}
-                                    disabled={loading}
-                                    type="submit"
-                                    typeButton="primary"
+        <>
+            <Head>
+                <title>Tiktok - Reset Password</title>
+            </Head>
+            <div>
+                <header className="h-header flex items-center bg-white shadow-header">
+                    <div className="app-container">
+                        <Logo />
+                    </div>
+                </header>
+                <div className={cx('auth')}>
+                    <div className="app-container flex items-center justify-center">
+                        <div className={cx('auth-content')}>
+                            <div className="flex flex-col text-center  items-center">
+                                <AiOutlineUnlock className="w-24 h-24 mb-6 " />
+                                <h3 className="font-semibold mb-4">
+                                    Reset your password
+                                </h3>
+                                <form
+                                    className="w-full mt-6 space-y-4"
+                                    onSubmit={handleSubmit(onSubmit)}
                                 >
-                                    Reset password
-                                </Button>
-                            </form>
+                                    <div className="input-group">
+                                        <label className="form-label text-start">
+                                            Password
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                type="password"
+                                                placeholder="New password"
+                                                className={`form-input ${
+                                                    errors.password?.message &&
+                                                    'error'
+                                                }`}
+                                                ref={(e) => {
+                                                    passwordRef.current = e;
+                                                    refPasswordFormHook(e);
+                                                }}
+                                                {...registerPassword}
+                                            />
+                                            <ButtonTogglePassword
+                                                hidden={passwordHidden}
+                                                onToggle={onPasswordToggle}
+                                                isError={
+                                                    !!errors.password?.message
+                                                }
+                                            />
+                                        </div>
+                                        {errors.password?.message && (
+                                            <p className="form-error text-start">
+                                                {errors.password?.message}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <Button
+                                        className={cx(
+                                            'btn',
+                                            'text-start',
+                                            'w-full',
+                                        )}
+                                        loading={loading}
+                                        disabled={loading}
+                                        type="submit"
+                                        typeButton="primary"
+                                    >
+                                        Reset password
+                                    </Button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

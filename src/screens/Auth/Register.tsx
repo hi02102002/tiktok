@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -98,159 +99,170 @@ const Register: NextPageWithLayout = () => {
     };
 
     return (
-        <div className={cx('auth')}>
-            <div className="app-container flex items-center justify-center">
-                <div className={cx('auth-content')}>
-                    <h3 className={cx('title')}>Register</h3>
-                    <form
-                        className="flex gap-6 flex-col"
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        <div className="flex gap-6">
-                            <div className="input-group w-full">
-                                <label className="form-label">First Name</label>
-                                <input
-                                    type="text"
-                                    placeholder="First Name"
-                                    className={`form-input ${
-                                        errors.firstName?.message && 'error'
-                                    }`}
-                                    {...register('firstName')}
-                                    autoFocus
-                                />
-                                {errors.firstName?.message && (
-                                    <p className="form-error">
-                                        {errors.firstName?.message}
-                                    </p>
-                                )}
-                            </div>
-                            <div className="input-group w-full">
-                                <label className="form-label">Last Name</label>
-                                <input
-                                    type="text"
-                                    placeholder="Last Name"
-                                    className={`form-input ${
-                                        errors.lastName?.message && 'error'
-                                    }`}
-                                    {...register('lastName')}
-                                />
-                                {errors.lastName?.message && (
-                                    <p className="form-error">
-                                        {errors.lastName?.message}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                        <div className="input-group">
-                            <label className="form-label">Username</label>
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                className={`form-input ${
-                                    errors.username?.message && 'error'
-                                }`}
-                                {...register('username')}
-                            />
-                            {errors.username?.message && (
-                                <p className="form-error">
-                                    {errors.username?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="input-group">
-                            <label className="form-label">Email</label>
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                className={`form-input ${
-                                    errors.email?.message && 'error'
-                                }`}
-                                {...register('email')}
-                            />
-                            {errors.email?.message && (
-                                <p className="form-error">
-                                    {errors.email?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="input-group">
-                            <label className="form-label">Password</label>
-                            <div className="relative">
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    className={`form-input ${
-                                        errors.password?.message && 'error'
-                                    }`}
-                                    ref={(e) => {
-                                        passwordRef.current = e;
-                                        refPasswordFormHook(e);
-                                    }}
-                                    {...registerPassword}
-                                />
-                                <ButtonTogglePassword
-                                    hidden={passwordHidden}
-                                    onToggle={onPasswordToggle}
-                                    isError={!!errors.password?.message}
-                                />
-                            </div>
-                            {errors.password?.message && (
-                                <p className="form-error">
-                                    {errors.password?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="input-group">
-                            <label className="form-label">
-                                Confirm Password
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    className={`form-input ${
-                                        errors.confirmPassword?.message &&
-                                        'error'
-                                    }`}
-                                    ref={(e) => {
-                                        confirmPasswordRef.current = e;
-                                        refConfirmPasswordFormHook(e);
-                                    }}
-                                    {...registerConfirmPassword}
-                                />
-                                <ButtonTogglePassword
-                                    hidden={confirmPasswordHidden}
-                                    onToggle={onConfirmPasswordToggle}
-                                    isError={!!errors.confirmPassword?.message}
-                                />
-                            </div>
-                            {errors.confirmPassword?.message && (
-                                <p className="form-error">
-                                    {errors.confirmPassword?.message}
-                                </p>
-                            )}
-                        </div>
-                        <Button
-                            type="submit"
-                            loading={loading}
-                            disabled={loading}
-                            className={cx('btn')}
-                            typeButton="primary"
+        <>
+            <Head>
+                <title>Tiktok - Register</title>
+            </Head>
+            <div className={cx('auth')}>
+                <div className="app-container flex items-center justify-center">
+                    <div className={cx('auth-content')}>
+                        <h3 className={cx('title')}>Register</h3>
+                        <form
+                            className="flex gap-6 flex-col"
+                            onSubmit={handleSubmit(onSubmit)}
                         >
-                            Register
-                        </Button>
-                    </form>
-                    <div className="mt-6 text-center ">
-                        <p>
-                            Already have account?{' '}
-                            <Link href={ROUTES.LOGIN}>
-                                <a className="link">Login</a>
-                            </Link>
-                        </p>
+                            <div className="flex gap-6">
+                                <div className="input-group w-full">
+                                    <label className="form-label">
+                                        First Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="First Name"
+                                        className={`form-input ${
+                                            errors.firstName?.message && 'error'
+                                        }`}
+                                        {...register('firstName')}
+                                        autoFocus
+                                    />
+                                    {errors.firstName?.message && (
+                                        <p className="form-error">
+                                            {errors.firstName?.message}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="input-group w-full">
+                                    <label className="form-label">
+                                        Last Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Last Name"
+                                        className={`form-input ${
+                                            errors.lastName?.message && 'error'
+                                        }`}
+                                        {...register('lastName')}
+                                    />
+                                    {errors.lastName?.message && (
+                                        <p className="form-error">
+                                            {errors.lastName?.message}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="input-group">
+                                <label className="form-label">Username</label>
+                                <input
+                                    type="text"
+                                    placeholder="Username"
+                                    className={`form-input ${
+                                        errors.username?.message && 'error'
+                                    }`}
+                                    {...register('username')}
+                                />
+                                {errors.username?.message && (
+                                    <p className="form-error">
+                                        {errors.username?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="input-group">
+                                <label className="form-label">Email</label>
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    className={`form-input ${
+                                        errors.email?.message && 'error'
+                                    }`}
+                                    {...register('email')}
+                                />
+                                {errors.email?.message && (
+                                    <p className="form-error">
+                                        {errors.email?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="input-group">
+                                <label className="form-label">Password</label>
+                                <div className="relative">
+                                    <input
+                                        type="password"
+                                        placeholder="Password"
+                                        className={`form-input ${
+                                            errors.password?.message && 'error'
+                                        }`}
+                                        ref={(e) => {
+                                            passwordRef.current = e;
+                                            refPasswordFormHook(e);
+                                        }}
+                                        {...registerPassword}
+                                    />
+                                    <ButtonTogglePassword
+                                        hidden={passwordHidden}
+                                        onToggle={onPasswordToggle}
+                                        isError={!!errors.password?.message}
+                                    />
+                                </div>
+                                {errors.password?.message && (
+                                    <p className="form-error">
+                                        {errors.password?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="input-group">
+                                <label className="form-label">
+                                    Confirm Password
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="password"
+                                        placeholder="Password"
+                                        className={`form-input ${
+                                            errors.confirmPassword?.message &&
+                                            'error'
+                                        }`}
+                                        ref={(e) => {
+                                            confirmPasswordRef.current = e;
+                                            refConfirmPasswordFormHook(e);
+                                        }}
+                                        {...registerConfirmPassword}
+                                    />
+                                    <ButtonTogglePassword
+                                        hidden={confirmPasswordHidden}
+                                        onToggle={onConfirmPasswordToggle}
+                                        isError={
+                                            !!errors.confirmPassword?.message
+                                        }
+                                    />
+                                </div>
+                                {errors.confirmPassword?.message && (
+                                    <p className="form-error">
+                                        {errors.confirmPassword?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <Button
+                                type="submit"
+                                loading={loading}
+                                disabled={loading}
+                                className={cx('btn')}
+                                typeButton="primary"
+                            >
+                                Register
+                            </Button>
+                        </form>
+                        <div className="mt-6 text-center ">
+                            <p>
+                                Already have account?{' '}
+                                <Link href={ROUTES.LOGIN}>
+                                    <a className="link">Login</a>
+                                </Link>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

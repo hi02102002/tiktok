@@ -1,7 +1,12 @@
 export { default as Auth } from './Auth';
 export { default as Avatar } from './Avatar';
 export { default as BriefProfile } from './BriefProfile';
-export { ButtonFollow, default as Button } from './Button';
+export {
+    ButtonFollow,
+    ButtonLike,
+    ButtonScrollToTop,
+    default as Button,
+} from './Button';
 export { default as Header } from './Header';
 export { default as Line } from './Line';
 export { default as Logo } from './Logo';

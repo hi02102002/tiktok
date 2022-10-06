@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Button } from '@/components';
 import { toggleFollowOnPost } from '@/features/post';
@@ -9,20 +9,21 @@ import { TypeFollow, onFollow } from '@/types';
 import { toast } from 'react-hot-toast';
 
 interface Props {
-    followers: Array<string>;
     receiverId: string;
     onFollow?: onFollow;
 }
 
-const ButtonFollow = ({ followers, receiverId, onFollow }: Props) => {
+const ButtonFollow = ({ receiverId, onFollow }: Props) => {
     const currentUser = useAppSelector(selectUser);
+    const [loading, setLoading] = useState<boolean>(false);
     const dispatch = useAppDispatch();
-    const isFollowing = useMemo(() => {
+
+    const _isFollowing = useMemo(() => {
         if (!currentUser) {
             return false;
         }
-        return followers.includes(currentUser._id);
-    }, [followers, currentUser]);
+        return currentUser.following.includes(receiverId);
+    }, [currentUser, receiverId]);
 
     // handle unfollow or following base on follower of user
     const handelToggleFollow = useCallback(async () => {
@@ -31,7 +32,8 @@ const ButtonFollow = ({ followers, receiverId, onFollow }: Props) => {
             return;
         }
         try {
-            if (isFollowing) {
+            setLoading(true);
+            if (_isFollowing) {
                 const user = await usersServices.unfollowUser(receiverId);
                 dispatch(toggleFollow(user));
 
@@ -57,16 +59,21 @@ const ButtonFollow = ({ followers, receiverId, onFollow }: Props) => {
                 onFollow?.(TypeFollow.FOLLOW, user._id, receiverId);
             }
         } catch (error) {
+            setLoading(false);
             console.log(error);
+        } finally {
+            setLoading(false);
         }
-    }, [dispatch, isFollowing, receiverId, onFollow, currentUser]);
+    }, [dispatch, _isFollowing, receiverId, onFollow, currentUser]);
 
     return (
         <Button
             onClick={handelToggleFollow}
-            typeButton={isFollowing ? 'tertiary' : 'primary'}
+            typeButton={_isFollowing ? 'tertiary' : 'primary'}
+            loading={loading}
+            disabled={loading}
         >
-            {isFollowing ? 'Following' : 'Follow'}
+            {_isFollowing ? 'Following' : 'Follow'}
         </Button>
     );
 };

@@ -4,7 +4,6 @@ import { Avatar } from '@/components';
 import { selectUser } from '@/features/user';
 import { useAppSelector } from '@/hooks';
 import { IUser } from '@/types';
-import { linkToProfile } from '@/utils';
 
 interface Props {
     user: IUser;
@@ -22,7 +21,7 @@ const SectionUser = ({
 }: Props) => {
     const currentUser = useAppSelector(selectUser);
     return (
-        <Link href={linkToProfile(currentUser?._id as string, user._id)}>
+        <Link href={`/user/${user._id}`}>
             <a>
                 <div
                     className={`flex items-center gap-3 py-2 px-4 rounded hover:bg-neutral-100 transition-all cursor-pointer ${className}`}
