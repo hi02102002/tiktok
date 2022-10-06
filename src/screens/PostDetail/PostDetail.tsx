@@ -118,10 +118,7 @@ const PostDetail: NextPageWithLayout = () => {
                     </Tippy>
                     <div>
                         {!(user?._id === post.user._id) && (
-                            <ButtonFollow
-                                followers={post.user.followers}
-                                receiverId={post.user._id}
-                            />
+                            <ButtonFollow receiverId={post.user._id} />
                         )}
                     </div>
                 </div>
