@@ -1,34 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TikTok Clone
+> This project build front end with restfull api
+# Features
+  - Login, register, forget password, send email to reset password
+  - Create post, reaction post, view detail post
+  - Comment on post, reaction comment, nest commnet
+  - Follow /  Unfollow user, view detail user, search user by name
+# Link Preview
+[https://tiktok-fake.vercel.app/](https://tiktok-fake.vercel.app/).
+# Screen Preivew
+- Home ![image](https://user-images.githubusercontent.com/84460646/195834032-8cb14f83-a16d-4474-8c38-f561fd75c3b8.png)
+- Login ![image](https://user-images.githubusercontent.com/84460646/195834245-d1e18be6-5a0e-48b0-92e1-1333fb60bd7d.png)
+- Register ![image](https://user-images.githubusercontent.com/84460646/195834299-b52e40c9-2590-47cb-b9ca-a1bbfc00c4e6.png)
+- Foget Password ![image](https://user-images.githubusercontent.com/84460646/195834399-79ff2ece-0b95-464e-9c18-aa9558ab1c4a.png)
+- Detail Post ![image](https://user-images.githubusercontent.com/84460646/195834565-3506382b-31d5-4faa-b1cf-194263897a75.png)
+- Detail user ![image](https://user-images.githubusercontent.com/84460646/195834630-b18985e7-cc68-4d63-8d26-66a18490c480.png)
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+  
