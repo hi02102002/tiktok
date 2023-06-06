@@ -5,6 +5,8 @@
   - Create post, reaction post, view detail post
   - Comment on post, reaction comment, nest commnet
   - Follow /  Unfollow user, view detail user, search user by name
+# Backend
+[https://github.com/hi02102002/tiktok-api](https://github.com/hi02102002/tiktok-api)
 # Link Preview
 [https://tiktok-fake.vercel.app/](https://tiktok-fake.vercel.app/).
 # Screen Preivew
